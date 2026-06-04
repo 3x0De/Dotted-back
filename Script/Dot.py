@@ -57,9 +57,13 @@ def GetRelativePath(Id):
         return [Get("SELECT Nom FROM Pages WHERE Id = %s", (Id,))[0][0]]
     else: return [Get("SELECT Nom FROM Pages WHERE Id = %s", (Id,))[0][0]] + GetRelativePath(Get("SELECT Parent FROM Pages WHERE Id = %s", (Id,))[0][0])
     
-def UpdateContenu(IDPAGE, Contenu):
-    Exec("UPDATE Pages SET Nom = %s, Banniere = %s, Icon = %s, Contenu = %s WHERE Id=%s", (Contenu.nom, Contenu.banniere, Contenu.icon, Contenu.cont, IDPAGE))
+# def UpdateContenu(IDPAGE, Contenu):
+#     Exec("UPDATE Pages SET Nom = %s, Banniere = %s, Icon = %s, Contenu = %s WHERE Id=%s", (Contenu.nom, Contenu.banniere, Contenu.icon, Contenu.cont, IDPAGE))
     
 def UpdateCategorie(Categorie):
     Exec("UPDATE Categories SET Icon = %s, Nom = %s, val = %s WHERE Id = %s", (Categorie.icon, Categorie.nom, Categorie.val, Categorie.id))
+
+
+def UpdateNom(id, nom):
+    Exec("UPDATE Pages SET Nom = %s WHERE Id=%s", (nom, id))
 
