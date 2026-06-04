@@ -45,7 +45,6 @@ app.add_middleware(
 
 @app.get("/con")
 def con(mdp: str, request: Request) -> bool:
-    print(hash(mdp))
     Client = Session(request.client.host)
     return Connection(GetNom(Client), mdp)
 
@@ -93,12 +92,14 @@ def changeNom(page:dict=Body(...)):
     return "Le nom a été changé"
 
 
+
+
+@app.get("/Path/{IDPAGE}")
+def getPath(IDPAGE: int):
+    return GetRelativePath(IDPAGE)
+
+
 # TODO:  Implementer la suite
-
-
-# @app.get("/Path/{IDPAGE}")
-# def getPath(IDPAGE: int):
-#     return GetRelativePath(IDPAGE)
     
     
 # @app.get("/Page/{IDPAGE}")
