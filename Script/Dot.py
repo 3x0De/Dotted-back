@@ -51,3 +51,15 @@ def GetNom(Id):
 
 def SupprIp(Nom, Ip):
     Exec("UPDATE Utilisateurs SET IP = %s WHERE Username = %s", (GetIpList(Nom).remove(ipaddress.IPv4Address(Ip)), Nom))
+    
+def GetRelativePath(Id):
+    if Get("SELECT Parent FROM Pages WHERE Id = %s", (Id,))[0][0] is None:
+        return [Get("SELECT Nom FROM Pages WHERE Id = %s", (Id,))[0][0]]
+    else: return [Get("SELECT Nom FROM Pages WHERE Id = %s", (Id,))[0][0]] + GetRelativePath(Get("SELECT Parent FROM Pages WHERE Id = %s", (Id,))[0][0])
+    
+def UpdateContenu(IDPAGE, Contenu):
+    Exec("UPDATE Pages SET Nom = %s, Banniere = %s, Icon = %s, Contenu = %s WHERE Id=%s", (Contenu.nom, Contenu.banniere, Contenu.icon, Contenu.cont, IDPAGE))
+    
+def UpdateCategorie(Categorie):
+    Exec("UPDATE Categories SET Icon = %s, Nom = %s, val = %s WHERE Id = %s", (Categorie.icon, Categorie.nom, Categorie.val, Categorie.id))
+

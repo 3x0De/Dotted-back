@@ -5,18 +5,8 @@ from Script.func import *
 app = FastAPI()  
 
 
-# @app.get("/")
-# def read_root():
-#     AddUser("ACAB", "Shaya", ["0.0.0.0"])
-#     # AddPage(None, "Shaya", "Caca", "ACAB", ["0.0.0.0"])
-#     # AddLinkinPark(1,1,False)
-#     # AddCategories(1,"Shaya", "Caca", "ACAB")
-    
-#     return {"ACAB MDP Shaya" : Connection("ACAB", "Shaya"), "ACAB MDP Shatta" : Connection("ACAB", "Shatta")}
 
-class User:
-    def __init__(self, numero):
-        pass
+
 
 @app.get("/signUp")
 def signUp(Nom: str, Mdp: str, request: Request):
@@ -37,16 +27,39 @@ def login(Nom: str, Mdp: str, request: Request):
         return "Mauvais mot de passe"
     
 @app.get("/logOut")
-def login(request: Request):
+def logout(request: Request):
     Client = Session(request.client.host)
     SupprIp(GetNom(Client), request.client.host)
     return "Déconnecté"
 
 @app.get("/")
-async def get_ip(request: Request):
+async def root(request: Request):
     Client = Session(request.client.host)
     if len(Get("SELECT Username FROM Utilisateurs WHERE Id = %s", (Client,))) == 0:
         return RedirectResponse(url="/signUp")
     Nom = GetNom(Client)
 
     return f"Bonjour {Nom}"
+
+
+@app.get("/Racine")
+def racine(request: Request):
+    Client = Session(request.client.host)
+    return afficherProjetrsRacine(Client)
+
+
+@app.get("/Path/{IDPAGE}")
+def getPath(IDPAGE: int):
+    return GetRelativePath(IDPAGE)
+    
+    
+@app.get("/Page/{IDPAGE}")
+def getPage(IDPAGE: int, send: bool = False, Contenu = None, Categorie=None):
+    if not send:
+        return getContent(IDPAGE)
+    else:
+        if Contenu is not None:
+            UpdateContenu(IDPAGE, Contenu)
+        if Categorie is not None:
+            UpdateCategorie(Categorie)
+    
