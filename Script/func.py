@@ -9,11 +9,11 @@ def Session(Ip):
             return user[1]
 
 
-def afficherProjetrsRacine(Ip):
-    return Get("SELECT P.Id, Nom FROM Pages P JOIN LinkinPark L ON P.Id = L.PageId JOIN Utilisateurs U ON U.Id = L.UserId WHERE Visibilite AND U.Id = %s AND P.Parent IS NULL ORDER BY P.id ASC", (Ip,))
+def afficherProjetsRacine(Ip):
+    return Get("SELECT P.Id, Nom FROM Pages P JOIN LinkinPark L ON P.Id = L.PageId JOIN Utilisateurs U ON U.Id = L.UserId WHERE Visibilite AND U.Id = %s AND P.Parent IS NULL ORDER BY P.id ASC;", (Ip,))
 
 def getContent(IDPAGE):
-    return Get("SELECT * FROM CATEGORIES C RIGHT JOIN PAGES P ON C.PageId = P.Id WHERE P.ID = %s",(IDPAGE,))
+    return Get("SELECT * FROM CATEGORIES C RIGHT JOIN PAGES P ON C.PageId = P.Id WHERE P.ID = %s;",(IDPAGE,))
 
 
 
@@ -24,3 +24,6 @@ def initProjets(Client):
 def supprimerProjet(proj):
     Exec("DELETE FROM LinkinPark WHERE PageId = %s;",(proj,))
     Exec("DELETE FROM Pages WHERE Id = %s;",(proj,))
+    
+def afficherProjetsPriveRacine(Ip):
+    return Get("SELECT P.Id, Nom FROM Pages P JOIN LinkinPark L ON P.Id = L.PageId JOIN Utilisateurs U ON U.Id = L.UserId WHERE NOT Visibilite AND U.Id = %s AND P.Parent IS NULL ORDER BY P.id ASC;", (Ip,))

@@ -43,6 +43,12 @@ app.add_middleware(
 #     SupprIp(GetNom(Client), request.client.host)
 #     return "Déconnecté"
 
+@app.get("/con")
+def con(mdp: str, request: Request) -> bool:
+    print(hash(mdp))
+    Client = Session(request.client.host)
+    return Connection(GetNom(Client), mdp)
+
 @app.get("/")
 async def root(request: Request):
     Client = Session(request.client.host)
@@ -56,12 +62,24 @@ async def root(request: Request):
 @app.get("/Racine")
 def racine(request: Request):
     Client = Session(request.client.host)
-    return afficherProjetrsRacine(Client)
+    return afficherProjetsRacine(Client)
+
+@app.get("/Racine/prive")
+def racine(request: Request):
+    Client = Session(request.client.host)
+    return afficherProjetsPriveRacine(Client)
 
 @app.post('/initProj')
 def initProj(request: Request):
     Client = Session(request.client.host)
     initProjets(Client)
+    return "Envoyé"
+
+@app.post('/initProj/prive')
+def initProj(request: Request):
+    Client = Session(request.client.host)
+    AddPage(None, "", "", "", [])
+    AddLinkinPark(Client, Get("SELECT MAX(Id) FROM Pages;")[0][0], False)
     return "Envoyé"
 
 @app.post('/supprProj')
