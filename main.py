@@ -98,6 +98,13 @@ def changeNom(page:dict=Body(...)):
 def getPath(IDPAGE: int):
     return GetRelativePath(IDPAGE)
 
+@app.get("/titre/{IDPAGE}")
+def getTitre(IDPAGE: int):
+    return Get("SELECT nom FROM Pages WHERE Id = %s", (IDPAGE,))[0][0]
+
+
+    
+
 
 # TODO:  Implementer la suite
     
