@@ -18,7 +18,8 @@ def getContent(IDPAGE):
 
 
 def initProjets(Client):
-    AddPage(None, "", "", "", [])
+    AddPage(None, "", "", "", [{"id": "b1", "type": "", "content": ""},
+    {"id": "b2", "type": "", "content": ""}])
     AddLinkinPark(Client, Get("SELECT MAX(Id) FROM Pages;")[0][0], True)
     
 def supprimerProjet(proj):
@@ -27,3 +28,8 @@ def supprimerProjet(proj):
     
 def afficherProjetsPriveRacine(Ip):
     return Get("SELECT P.Id, Nom FROM Pages P JOIN LinkinPark L ON P.Id = L.PageId JOIN Utilisateurs U ON U.Id = L.UserId WHERE NOT Visibilite AND U.Id = %s AND P.Parent IS NULL ORDER BY P.id ASC;", (Ip,))
+
+
+
+def getContenu(Ip):
+    return Get("SELECT Contenu FROM Pages WHERE Id = %s;", (Ip,))[0][0]

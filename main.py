@@ -77,7 +77,8 @@ def initProj(request: Request):
 @app.post('/initProj/prive')
 def initProj(request: Request):
     Client = Session(request.client.host)
-    AddPage(None, "", "", "", [])
+    AddPage(None, "", "", "", [{"id": "b1", "type": "", "content": ""},
+    {"id": "b2", "type": "", "content": ""}])
     AddLinkinPark(Client, Get("SELECT MAX(Id) FROM Pages;")[0][0], False)
     return "Envoyé"
 
@@ -103,7 +104,14 @@ def getTitre(IDPAGE: int):
     return Get("SELECT nom FROM Pages WHERE Id = %s", (IDPAGE,))[0][0]
 
 
-    
+@app.get("/Cont/{IDPAGE}")
+def getCont(IDPAGE: int):
+    return getContenu(IDPAGE)
+
+@app.post("/Modif/Cont/{IDPAGE}")
+def modifCont(IDPAGE: int, page: list = Body(..., embed=True)):
+    Exec("UPDATE Pages SET Contenu = %s WHERE Id = %s;", (json.dumps(page), IDPAGE))
+    return "Le contenu est bien changé"
 
 
 # TODO:  Implementer la suite
