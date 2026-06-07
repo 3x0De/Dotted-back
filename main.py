@@ -114,16 +114,3 @@ def modifCont(IDPAGE: int, page: list = Body(..., embed=True)):
     return "Le contenu est bien changé"
 
 
-# TODO:  Implementer la suite
-    
-    
-# @app.get("/Page/{IDPAGE}")
-# def getPage(IDPAGE: int, send: bool = False, Contenu = None, Categorie=None):
-#     if not send:
-#         return getContent(IDPAGE)
-#     else:
-#         if Contenu is not None:
-#             UpdateContenu(IDPAGE, Contenu)
-#         if Categorie is not None:
-#             UpdateCategorie(Categorie)
-    
