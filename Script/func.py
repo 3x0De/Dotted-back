@@ -18,7 +18,7 @@ def getContent(IDPAGE):
 
 
 def initProjets(Client):
-    AddPage(None, "", "", "", [{"id": "b1", "type": "", "content": ""},
+    AddPage(None, "", None, None, [{"id": "b1", "type": "", "content": ""},
     {"id": "b2", "type": "", "content": ""}])
     AddLinkinPark(Client, Get("SELECT MAX(Id) FROM Pages;")[0][0], True)
     

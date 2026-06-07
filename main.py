@@ -101,7 +101,7 @@ def initProj(request: Request):
 @app.post('/initProj/prive')
 def initProj(request: Request):
     Client = Session(request.client.host)
-    AddPage(None, "", "", "", [{"id": "b1", "type": "", "content": ""},
+    AddPage(None, "", None, None, [{"id": "b1", "type": "", "content": ""},
     {"id": "b2", "type": "", "content": ""}])
     AddLinkinPark(Client, Get("SELECT MAX(Id) FROM Pages;")[0][0], False)
     return "Envoyé"
@@ -162,7 +162,7 @@ def getIconPage(IDPAGE: int):
     if path is None:
         return FileResponse('Image/Icon/Dotted_mini.svg', media_type="image/svg+xml")
     else:
-        return FileResponse(path, media_type="image/svg+xml+png+jpg")
+        return FileResponse(path, media_type="image/svg+xml")
 
 @app.get("/Banniere/Page/{IDPAGE}")
 def getIconPage(IDPAGE: int):
@@ -170,4 +170,4 @@ def getIconPage(IDPAGE: int):
     if path is None:
         return FileResponse('Image/Banniere/Dotted_full.svg', media_type="image/svg+xml")
     else:
-        return FileResponse(path, media_type="image/svg+xml+png+jpg")
+        return FileResponse(path, media_type="image/svg+xml")
