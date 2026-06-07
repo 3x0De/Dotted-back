@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request, Body
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
+from fastapi.responses import FileResponse
 from Script.func import *
 
 app = FastAPI()  
@@ -18,6 +19,16 @@ app.add_middleware(
 
 
 # TODO: Implementer les logs dans le front
+
+
+# ================================
+#     __    ____  ___________   __
+#    / /   / __ \/ ____/  _/ | / /
+#   / /   / / / / / __ / //  |/ /
+#  / /___/ /_/ / /_/ // // /|  /
+# /_____/\____/\____/___/_/ |_/
+#
+# ================================
 
 # @app.get("/signUp")
 # def signUp(Nom: str, Mdp: str, request: Request):
@@ -58,6 +69,19 @@ async def root(request: Request):
     return f"Bonjour {Nom}"
 
 
+
+
+
+# =========================
+#     _____   ____________
+#    /  _/ | / /  _/_  __/
+#    / //  |/ // /  / /
+#  _/ // /|  // /  / /
+# /___/_/ |_/___/ /_/
+#
+# =========================
+
+
 @app.get("/Racine")
 def racine(request: Request):
     Client = Session(request.client.host)
@@ -93,6 +117,14 @@ def changeNom(page:dict=Body(...)):
     return "Le nom a été changé"
 
 
+# =====================================================
+#     ____  ____  ____      _________________________
+#    / __ \/ __ \/ __ \    / / ____/ ____/_  __/ ___/
+#   / /_/ / /_/ / / / /_  / / __/ / /     / /  \__ \
+#  / ____/ _, _/ /_/ / /_/ / /___/ /___  / /  ___/ /
+# /_/   /_/ |_|\____/\____/_____/\____/ /_/  /____/
+#
+# =====================================================
 
 
 @app.get("/Path/{IDPAGE}")
@@ -114,3 +146,28 @@ def modifCont(IDPAGE: int, page: list = Body(..., embed=True)):
     return "Le contenu est bien changé"
 
 
+# =========================================
+#     ______  ______   _________________
+#    /  _/  |/  /   | / ____/ ____/ ___/
+#    / // /|_/ / /| |/ / __/ __/  \__ \
+#  _/ // /  / / ___ / /_/ / /___ ___/ /
+# /___/_/  /_/_/  |_\____/_____//____/
+#
+# =========================================
+
+
+@app.get("/Icon/Page/{IDPAGE}")
+def getIconPage(IDPAGE: int):
+    path = get_Icon_Page(IDPAGE)
+    if path is None:
+        return FileResponse('Image/Icon/Dotted_mini.svg', media_type="image/svg+xml")
+    else:
+        return FileResponse(path, media_type="image/svg+xml+png+jpg")
+
+@app.get("/Banniere/Page/{IDPAGE}")
+def getIconPage(IDPAGE: int):
+    path = get_Ban_Page(IDPAGE)
+    if path is None:
+        return FileResponse('Image/Banniere/Dotted_full.svg', media_type="image/svg+xml")
+    else:
+        return FileResponse(path, media_type="image/svg+xml+png+jpg")

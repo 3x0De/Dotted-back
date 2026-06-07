@@ -33,3 +33,10 @@ def afficherProjetsPriveRacine(Ip):
 
 def getContenu(Ip):
     return Get("SELECT Contenu FROM Pages WHERE Id = %s;", (Ip,))[0][0]
+
+
+def get_Icon_Page(Id):
+    return Get("SELECT Icon FROM Pages WHERE Id = %s", (Id,))[0][0]
+
+def get_Ban_Page(Id):
+    return Get("SELECT Banniere FROM Pages WHERE Id = %s", (Id,))[0][0]
