@@ -9,7 +9,8 @@ except:
 
 
 def AddUser(username, password, ip):
-    if (Get("SELECT Username FROM Utilisateurs;")!= [] or username in [Nom[0][0] for Nom in Get("SELECT Username FROM Utilisateurs;")]):
+    existing = [row[0] for row in Get("SELECT Username FROM Utilisateurs;")]
+    if username in existing:
         return False
     Exec("INSERT INTO Utilisateurs VALUES ((SELECT COALESCE(Max(Id), 0) FROM Utilisateurs) + 1, %s, %s, %s);", (username, hash(password), [ip]))
     return True
