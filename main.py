@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, Body
+from fastapi import FastAPI, Request, Body, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from Script.func import *
@@ -18,7 +18,6 @@ app.add_middleware(
 
 
 
-from fastapi import FastAPI, Request, Body, HTTPException
 
 @app.get("/signUp")
 def signUp(Nom: str, Mdp: str, request: Request):
@@ -54,10 +53,22 @@ def con(mdp: str, request: Request) -> bool:
     Client = Session(request.client.host)
     return Connection(GetNom(Client), mdp)
 
+
+@app.get("/maxId")
+def maxId():
+    return Get("SELECT COALESCE(max(Id), 0) FROM Pages;")[0][0]
+
+@app.get("/peuxCon/{IDPAGE}")
+def peuxCon(IDPAGE : int,request: Request):
+    Client = Session(request.client.host)
+    if Get("SELECT EXISTS (SELECT 1 FROM LinkinPark WHERE UserId = %s AND PageId = %s);", (Client, IDPAGE))[0][0]:
+        return True
+    return False
+
 @app.get("/")
 async def root(request: Request):
     Client = Session(request.client.host)
-    if len(Get("SELECT Username FROM Utilisateurs WHERE Id = %s", (Client,))) == 0:
+    if len(Get("SELECT Username FROM Utilisateurs WHERE Id = %s;", (Client,))) == 0:
         return RedirectResponse(url="/signUp")
     Nom = GetNom(Client)
 

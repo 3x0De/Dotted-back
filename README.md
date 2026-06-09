@@ -54,6 +54,8 @@ Ce repo fait partis du projet [Dotted](https://github.com/3x0De/Dotted-docs/)
 | `GET /logIn`                | Verifier si l'utilisateur connecté a entré le bon mot de passe |
 | `POST /logOut`              | Déconnecte l'utilisateur                                       |
 | `GET /con`                  | Verifier si l'utilisateur connecté a entré le bon mot de passe |
+| `GET /maxId`                | Renvoie le plus grand ID de toutes les pages                   |
+| `GET /peuxCon/{IDPAGE}`     | Verifier si l'utilisateurpux voir IDPAGE                       |
 | `GET /`                     | Récupère le nom d'utilisateur du connecté                      |
 | `GET /Racine`               | Affiche La liste des projets de l'utilisateur                  |
 | `GET /Racine/prive`         | Affiche La liste des projets privés de l'utilisateur           |
