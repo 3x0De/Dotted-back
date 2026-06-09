@@ -1,7 +1,10 @@
 from Script.Dot import *
 
-def Connection (username, mdp):
-    return GetMdp(username) == hash(mdp)
+def Connection(username, mdp):
+    stored = GetMdp(username)
+    if stored is None:
+        return False
+    return stored == hash(mdp)
 
 def Session(Ip):
     for user in GetIpIdAllList():

@@ -31,9 +31,11 @@ def AddCategories(PageId, Icon, Nom, Val):
 
 
 
-
 def GetMdp(Nom):
-    return Get("SELECT Password FROM Utilisateurs WHERE Username = %s", (Nom,))[0][0]
+    result = Get("SELECT Password FROM Utilisateurs WHERE Username = %s", (Nom,))
+    if not result:
+        return None
+    return result[0][0]
 
 def GetIpList(Nom):
     return Get("SELECT IP FROM Utilisateurs WHERE Username = %s", (Nom,))[0][0]
@@ -42,10 +44,8 @@ def GetIpIdAllList():
     return Get("SELECT IP, Id FROM Utilisateurs")
 
 def AddIp(Nom, Ip):
-    if GetIpList(Nom) is None:
-        Exec("UPDATE Utilisateurs SET IP = %s WHERE Username = %s", ([Ip], Nom))
-    else:
-        Exec("UPDATE Utilisateurs SET IP = %s WHERE Username = %s", (GetIpList(Nom) + [Ip], Nom))
+    existing = [str(ip) for ip in GetIpList(Nom)] 
+    Exec("UPDATE Utilisateurs SET IP = %s WHERE Username = %s", (existing + [Ip], Nom))
 
 def GetNom(Id):
     return Get("SELECT Username FROM Utilisateurs WHERE Id = %s", (Id,))[0][0]

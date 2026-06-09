@@ -37,8 +37,7 @@ def login(Nom: str, Mdp: str, request: Request):
         if GetIpList(Nom) is None or Ip not in GetIpList(Nom):
             AddIp(Nom, Ip)
         return True
-    else:
-        return False
+    raise HTTPException(status_code=401, detail="Mauvais identifiants")
 
 # @app.get("/logOut")
 # def logout(request: Request):
