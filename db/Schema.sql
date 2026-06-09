@@ -35,3 +35,5 @@ CREATE TABLE Categories (
 
     FOREIGN KEY (PageId) REFERENCES Pages(Id)
 );
+
+INSERT INTO Pages VALUES (1, NULL, NULL, NULL, NULL, '[{"id": "b1", "type": "", "content": ""}, {"id": "b2", "type": "", "content": ""}]');

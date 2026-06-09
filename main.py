@@ -24,10 +24,11 @@ from fastapi import FastAPI, Request, Body, HTTPException
 def signUp(Nom: str, Mdp: str, request: Request):
     Ip = request.client.host
     result = AddUser(Nom, Mdp, Ip)
-    Client = Session(request.client.host)
-    initProjets(Client)
+    Client = Session(Ip)
     if not result:
         raise HTTPException(status_code=409, detail="Nom déjà pris")
+
+    AddLinkinPark(Client, 1, True)
     return result
 
 @app.get("/logIn")
@@ -115,6 +116,8 @@ def getCont(IDPAGE: int):
 
 @app.post("/Modif/Cont/{IDPAGE}")
 def modifCont(IDPAGE: int, page: list = Body(..., embed=True)):
+    print(page)
+    print("ici", json.dumps(page))
     Exec("UPDATE Pages SET Contenu = %s WHERE Id = %s;", (json.dumps(page), IDPAGE))
     return "Le contenu est bien changé"
 
