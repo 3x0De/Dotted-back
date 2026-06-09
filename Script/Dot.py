@@ -51,7 +51,12 @@ def GetNom(Id):
     return Get("SELECT Username FROM Utilisateurs WHERE Id = %s", (Id,))[0][0]
 
 def SupprIp(Nom, Ip):
-    Exec("UPDATE Utilisateurs SET IP = %s WHERE Username = %s", (GetIpList(Nom).remove(ipaddress.IPv4Address(Ip)), Nom))
+    ips = [str(ip) for ip in GetIpList(Nom)]
+    print("IPs en base:", ips)
+    print("IP à supprimer:", str(Ip))
+    print("Match:", str(Ip) in ips)
+    ips.remove(str(Ip))
+    Exec("UPDATE Utilisateurs SET IP = %s WHERE Username = %s", (ips, Nom))
     
 def GetRelativePath(Id):
     nom, id = Get("SELECT Nom, id FROM Pages WHERE Id = %s", (Id,))[0]

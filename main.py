@@ -17,7 +17,6 @@ app.add_middleware(
 )
 
 
-# TODO: Implementer les logs dans le front
 
 from fastapi import FastAPI, Request, Body, HTTPException
 
@@ -25,7 +24,8 @@ from fastapi import FastAPI, Request, Body, HTTPException
 def signUp(Nom: str, Mdp: str, request: Request):
     Ip = request.client.host
     result = AddUser(Nom, Mdp, Ip)
-    print(result)
+    Client = Session(request.client.host)
+    initProjets(Client)
     if not result:
         raise HTTPException(status_code=409, detail="Nom déjà pris")
     return result
@@ -34,16 +34,19 @@ def signUp(Nom: str, Mdp: str, request: Request):
 def login(Nom: str, Mdp: str, request: Request):
     Ip = request.client.host
     if Connection(Nom, Mdp):
-        if GetIpList(Nom) is None or Ip not in GetIpList(Nom):
+        existing = [str(ip) for ip in (GetIpList(Nom) or [])]
+        if Ip not in existing:
             AddIp(Nom, Ip)
         return True
     raise HTTPException(status_code=401, detail="Mauvais identifiants")
 
-# @app.get("/logOut")
-# def logout(request: Request):
-#     Client = Session(request.client.host)
-#     SupprIp(GetNom(Client), request.client.host)
-#     return "Déconnecté"
+@app.post("/logOut")
+def logout(request: Request):
+    Client = Session(request.client.host)
+    Nom = GetNom(Client)
+    if Nom:
+        SupprIp(Nom, request.client.host)
+    return "Déconnecté"
 
 @app.get("/con")
 def con(mdp: str, request: Request) -> bool:
