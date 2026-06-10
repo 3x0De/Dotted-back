@@ -196,8 +196,7 @@ def changeIcon(props: dict = Body(...)):
 
 @app.post("/Banniere/change")
 async def changeBanniere(file: UploadFile = File(...), id: int = Form(...)):
-    print("ouioui baguette")
-    dest_dir = f"Image/Banniere/"
+    dest_dir = f"Image/Banniere"
     os.makedirs(dest_dir, exist_ok=True)
 
     ext = file.filename.split(".")[-1]
@@ -209,3 +208,10 @@ async def changeBanniere(file: UploadFile = File(...), id: int = Form(...)):
     Exec("UPDATE Pages SET Banniere = %s WHERE Id = %s;", (dest_path, id))
 
     return {"ok": True, "path": dest_path}
+
+
+@app.post("/Banniere/del")
+def supprBanniere(props: dict = Body(...)):
+    Exec("UPDATE Pages SET Banniere = NULL WHERE Id = %s;", (props["id"],))
+
+    return {"ok": True}
