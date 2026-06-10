@@ -159,15 +159,13 @@ def modifCont(IDPAGE: int, page: list = Body(..., embed=True)):
 @app.get("/Icon/Page/{IDPAGE}")
 def getIconPage(IDPAGE: int):
     path = get_Icon_Page(IDPAGE)
-    if path is None:
-        return FileResponse('Image/Icon/Dotted_mini.svg', media_type="image/svg+xml")
-    else:
-        return FileResponse(path, media_type="image/svg+xml")
+    return FileResponse(path, media_type="image/svg+xml")
 
 @app.get("/Banniere/Page/{IDPAGE}")
 def getIconPage(IDPAGE: int):
     path = get_Ban_Page(IDPAGE)
-    if path is None:
-        return FileResponse('Image/Banniere/Dotted_full.svg', media_type="image/svg+xml")
-    else:
-        return FileResponse(path, media_type="image/svg+xml")
+    return FileResponse(path, media_type="image/svg+xml")
+
+@app.post("/Icon/change")
+def changeIcon(props: dict = Body(...)):
+    Exec("UPDATE Pages SET Icon = %s WHERE Id = %s;", ("Image/Icon/" + props["Icon"], props["Id"]))

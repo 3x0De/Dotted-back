@@ -36,7 +36,13 @@ def getContenu(Ip):
 
 
 def get_Icon_Page(Id):
-    return Get("SELECT Icon FROM Pages WHERE Id = %s", (Id,))[0][0]
+    rep = Get("SELECT Icon FROM Pages WHERE Id = %s", (Id,))
+    if not rep[0][0] is None:
+        return rep[0][0]
+    return 'Image/Icon/Dotted_mini.svg'
 
 def get_Ban_Page(Id):
-    return Get("SELECT Banniere FROM Pages WHERE Id = %s", (Id,))[0][0]
+    rep= Get("SELECT Banniere FROM Pages WHERE Id = %s", (Id,))
+    if not rep[0][0] is None:
+        return rep[0][0]
+    return 'Image/Banniere/Dotted_full.svg'
