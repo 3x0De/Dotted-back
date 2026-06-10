@@ -48,25 +48,28 @@ Ce repo fait partis du projet [Dotted](https://github.com/3x0De/Dotted-docs/)
 
 ## ENDPOINT
 
-| Endpoint                    | Utilisation                                                    |
-| --------------------------- | -------------------------------------------------------------- |
-| `GET /signUp`               | Créé un compte utilisateur                                     |
-| `GET /logIn`                | Verifier si l'utilisateur connecté a entré le bon mot de passe |
-| `POST /logOut`              | Déconnecte l'utilisateur                                       |
-| `GET /con`                  | Verifier si l'utilisateur connecté a entré le bon mot de passe |
-| `GET /maxId`                | Renvoie le plus grand ID de toutes les pages                   |
-| `GET /peuxCon/{IDPAGE}`     | Verifier si l'utilisateurpux voir IDPAGE                       |
-| `GET /`                     | Récupère le nom d'utilisateur du connecté                      |
-| `GET /Racine`               | Affiche La liste des projets de l'utilisateur                  |
-| `GET /Racine/prive`         | Affiche La liste des projets privés de l'utilisateur           |
-| `POST /initProj`            | Initialise un projet                                           |
-| `POST /initProj/prive`      | Initialise un projet privé                                     |
-| `POST /supprProj`           | Supprime une page                                              |
-| `POST /Change/Nom`          | Change le titre d'une page                                     |
-| `GET /Path/{IDPAGE}`        | Récupère le chemin pour acceder a une page                     |
-| `GET /titre/{IDPAGE}`       | Récupère le titre d'une page                                   |
-| `GET /Cont/{IDPAGE}`        | Récupère le contenu d'une page                                 |
-| `POST /Modif/Cont/{IDPAGE}` | Modifie le contenu d'une page                                  |
+| Endpoint                      | Utilisation                                                    |
+| ----------------------------- | -------------------------------------------------------------- |
+| `GET /signUp`                 | Créé un compte utilisateur                                     |
+| `GET /logIn`                  | Verifier si l'utilisateur connecté a entré le bon mot de passe |
+| `POST /logOut`                | Déconnecte l'utilisateur                                       |
+| `GET /con`                    | Verifier si l'utilisateur connecté a entré le bon mot de passe |
+| `GET /maxId`                  | Renvoie le plus grand ID de toutes les pages                   |
+| `GET /peuxCon/{IDPAGE}`       | Verifier si l'utilisateurpux voir IDPAGE                       |
+| `GET /`                       | Récupère le nom d'utilisateur du connecté                      |
+| `GET /Racine`                 | Affiche La liste des projets de l'utilisateur                  |
+| `GET /Racine/prive`           | Affiche La liste des projets privés de l'utilisateur           |
+| `POST /initProj`              | Initialise un projet                                           |
+| `POST /initProj/prive`        | Initialise un projet privé                                     |
+| `POST /supprProj`             | Supprime une page                                              |
+| `POST /Change/Nom`            | Change le titre d'une page                                     |
+| `GET /Path/{IDPAGE}`          | Récupère le chemin pour acceder a une page                     |
+| `GET /titre/{IDPAGE}`         | Récupère le titre d'une page                                   |
+| `GET /Cont/{IDPAGE}`          | Récupère le contenu d'une page                                 |
+| `POST /Modif/Cont/{IDPAGE}`   | Modifie le contenu d'une page                                  |
+| `GET /Icon/Page/{IDPAGE}`     | Renvoie le contenu de l'iconne correspondante                  |
+| `GET /Banniere/Page/{IDPAGE}` | Renvoie le contenu de la banniere correspondante               |
+| `POST /Icon/change`           | Modifie le contenu de l'iconne                                 |
 
 ## Note
 

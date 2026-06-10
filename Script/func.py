@@ -21,7 +21,7 @@ def getContent(IDPAGE):
 
 
 def initProjets(Client):
-    AddPage(None, "", "", "", [{"id": "b1", "type": "", "content": ""},
+    AddPage(None, "", None, None, [{"id": "b1", "type": "", "content": ""},
     {"id": "b2", "type": "", "content": ""}])
     AddLinkinPark(Client, Get("SELECT MAX(Id) FROM Pages;")[0][0], True)
     
@@ -36,3 +36,16 @@ def afficherProjetsPriveRacine(Ip):
 
 def getContenu(Ip):
     return Get("SELECT Contenu FROM Pages WHERE Id = %s;", (Ip,))[0][0]
+
+
+def get_Icon_Page(Id):
+    rep = Get("SELECT Icon FROM Pages WHERE Id = %s", (Id,))
+    if not rep[0][0] is None:
+        return rep[0][0]
+    return 'Image/Icon/Dotted_mini.svg'
+
+def get_Ban_Page(Id):
+    rep= Get("SELECT Banniere FROM Pages WHERE Id = %s", (Id,))
+    if not rep[0][0] is None:
+        return rep[0][0]
+    return 'Image/Banniere/Dotted_full.svg'

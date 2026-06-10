@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request, Body, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
+from fastapi.responses import FileResponse
 from Script.func import *
 
 app = FastAPI()  
@@ -18,6 +19,14 @@ app.add_middleware(
 
 
 
+# ================================
+#     __    ____  ___________   __
+#    / /   / __ \/ ____/  _/ | / /
+#   / /   / / / / / __ / //  |/ /
+#  / /___/ /_/ / /_/ // // /|  /
+# /_____/\____/\____/___/_/ |_/
+#
+# ================================
 
 @app.get("/signUp")
 def signUp(Nom: str, Mdp: str, request: Request):
@@ -48,6 +57,8 @@ def logout(request: Request):
         SupprIp(Nom, request.client.host)
     return "Déconnecté"
 
+
+
 @app.get("/con")
 def con(mdp: str, request: Request) -> bool:
     Client = Session(request.client.host)
@@ -75,6 +86,19 @@ async def root(request: Request):
     return f"Bonjour {Nom}"
 
 
+
+
+
+# =========================
+#     _____   ____________
+#    /  _/ | / /  _/_  __/
+#    / //  |/ // /  / /
+#  _/ // /|  // /  / /
+# /___/_/ |_/___/ /_/
+#
+# =========================
+
+
 @app.get("/Racine")
 def racine(request: Request):
     Client = Session(request.client.host)
@@ -94,7 +118,7 @@ def initProj(request: Request):
 @app.post('/initProj/prive')
 def initProj(request: Request):
     Client = Session(request.client.host)
-    AddPage(None, "", "", "", [{"id": "b1", "type": "", "content": ""},
+    AddPage(None, "", None, None, [{"id": "b1", "type": "", "content": ""},
     {"id": "b2", "type": "", "content": ""}])
     AddLinkinPark(Client, Get("SELECT MAX(Id) FROM Pages;")[0][0], False)
     return "Envoyé"
@@ -110,6 +134,14 @@ def changeNom(page:dict=Body(...)):
     return "Le nom a été changé"
 
 
+# =====================================================
+#     ____  ____  ____      _________________________
+#    / __ \/ __ \/ __ \    / / ____/ ____/_  __/ ___/
+#   / /_/ / /_/ / / / /_  / / __/ / /     / /  \__ \
+#  / ____/ _, _/ /_/ / /_/ / /___/ /___  / /  ___/ /
+# /_/   /_/ |_|\____/\____/_____/\____/ /_/  /____/
+#
+# =====================================================
 
 
 @app.get("/Path/{IDPAGE}")
@@ -127,9 +159,32 @@ def getCont(IDPAGE: int):
 
 @app.post("/Modif/Cont/{IDPAGE}")
 def modifCont(IDPAGE: int, page: list = Body(..., embed=True)):
-    print(page)
-    print("ici", json.dumps(page))
     Exec("UPDATE Pages SET Contenu = %s WHERE Id = %s;", (json.dumps(page), IDPAGE))
     return "Le contenu est bien changé"
 
 
+# =========================================
+#     ______  ______   _________________
+#    /  _/  |/  /   | / ____/ ____/ ___/
+#    / // /|_/ / /| |/ / __/ __/  \__ \
+#  _/ // /  / / ___ / /_/ / /___ ___/ /
+# /___/_/  /_/_/  |_\____/_____//____/
+#
+# =========================================
+
+
+@app.get("/Icon/Page/{IDPAGE}")
+def getIconPage(IDPAGE: int):
+    path = get_Icon_Page(IDPAGE)
+    return FileResponse(path, media_type="image/svg+xml", headers={"Cache-Control": "no-store, no-cache, must-revalidate"})
+
+@app.get("/Banniere/Page/{IDPAGE}")
+def getIconPage(IDPAGE: int):
+    path = get_Ban_Page(IDPAGE)
+    return FileResponse(path, media_type="image/svg+xml", headers={"Cache-Control": "no-store, no-cache, must-revalidate"})
+
+@app.post("/Icon/change")
+def changeIcon(props: dict = Body(...)):
+    print("Props reçus:", props)
+    Exec("UPDATE Pages SET Icon = %s WHERE Id = %s;", ("Image/Icon/" + props["Icon"], props["Id"]))
+    return {"ok": True}
