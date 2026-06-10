@@ -1,8 +1,9 @@
-from fastapi import FastAPI, Request, Body, HTTPException
+from fastapi import FastAPI, Request, Body, HTTPException, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from fastapi.responses import FileResponse
 from Script.func import *
+import shutil, os
 
 app = FastAPI()  
 
@@ -190,3 +191,21 @@ def changeIcon(props: dict = Body(...)):
     else:
         Exec("UPDATE Pages SET Icon = %s WHERE Id = %s;", ("Image/Icon/" + props["Icon"], props["Id"]))
     return {"ok": True}
+
+
+
+@app.post("/Banniere/change")
+async def changeBanniere(file: UploadFile = File(...), id: int = Form(...)):
+    print("ouioui baguette")
+    dest_dir = f"Image/Banniere/"
+    os.makedirs(dest_dir, exist_ok=True)
+
+    ext = file.filename.split(".")[-1]
+    dest_path = f"{dest_dir}/{id}.{ext}"
+
+    with open(dest_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    Exec("UPDATE Pages SET Banniere = %s WHERE Id = %s;", (dest_path, id))
+
+    return {"ok": True, "path": dest_path}
