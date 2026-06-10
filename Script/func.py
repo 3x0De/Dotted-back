@@ -26,8 +26,8 @@ def initProjets(Client):
     AddLinkinPark(Client, Get("SELECT MAX(Id) FROM Pages;")[0][0], True)
     
 def supprimerProjet(proj):
-    Exec("DELETE FROM LinkinPark WHERE PageId = %s;",(proj,))
-    Exec("DELETE FROM Pages WHERE Id = %s;",(proj,))
+    Exec("DELETE FROM LinkinPark WHERE PageId = %s AND NOT PageId = 1;",(proj,))
+    Exec("DELETE FROM Pages WHERE Id = %s AND NOT Id = 1;",(proj,))
     
 def afficherProjetsPriveRacine(Ip):
     return Get("SELECT P.Id, Nom FROM Pages P JOIN LinkinPark L ON P.Id = L.PageId JOIN Utilisateurs U ON U.Id = L.UserId WHERE NOT Visibilite AND U.Id = %s AND P.Parent IS NULL ORDER BY P.id ASC;", (Ip,))
