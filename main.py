@@ -185,6 +185,8 @@ def getIconPage(IDPAGE: int):
 
 @app.post("/Icon/change")
 def changeIcon(props: dict = Body(...)):
-    print("Props reçus:", props)
-    Exec("UPDATE Pages SET Icon = %s WHERE Id = %s;", ("Image/Icon/" + props["Icon"], props["Id"]))
+    if props.get("Icon") is None:
+        Exec("UPDATE Pages SET Icon = NULL WHERE Id = %s;", (props["Id"],))
+    else:
+        Exec("UPDATE Pages SET Icon = %s WHERE Id = %s;", ("Image/Icon/" + props["Icon"], props["Id"]))
     return {"ok": True}
