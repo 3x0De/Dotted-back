@@ -70,6 +70,8 @@ Ce repo fait partis du projet [Dotted](https://github.com/3x0De/Dotted-docs/)
 | `GET /Icon/Page/{IDPAGE}`     | Renvoie le contenu de l'iconne correspondante                  |
 | `GET /Banniere/Page/{IDPAGE}` | Renvoie le contenu de la banniere correspondante               |
 | `POST /Icon/change`           | Modifie le contenu de l'iconne                                 |
+| `POST /Banniere/change`       | Change le contenu de la banniere correspondante                |
+| `POST /Banniere/del`          | Supprime le contenu de la banniere correspondante              |
 
 ## Note
 
