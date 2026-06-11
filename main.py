@@ -124,6 +124,16 @@ def initProj(request: Request):
     AddLinkinPark(Client, Get("SELECT MAX(Id) FROM Pages;")[0][0], False)
     return "Envoyé"
 
+@app.post('/initProj/enfant')
+def initEnfant(parent:int = Body(..., embed=True)):
+    print(parent)
+    AddPage(parent, "", None, None, [{"id": "b1", "type": "", "content": ""},
+    {"id": "b2", "type": "", "content": ""}])
+    id = Get("SELECT MAX(Id) FROM Pages;")[0][0]
+    for enfant in Get("SELECT UserId FROM Linkinpark WHERE PageId = %s;", (parent,)):
+        AddLinkinPark(enfant[0], id, True)
+    return "Envoyé"
+
 @app.post('/supprProj')
 def supprProj(proj:int= Body(..., embed=True)):
     supprimerProjet(proj)

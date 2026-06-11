@@ -60,6 +60,7 @@ Ce repo fait partis du projet [Dotted](https://github.com/3x0De/Dotted-docs/)
 | `GET /Racine`                 | Affiche La liste des projets de l'utilisateur                  |
 | `GET /Racine/prive`           | Affiche La liste des projets privés de l'utilisateur           |
 | `POST /initProj`              | Initialise un projet                                           |
+| `POST /initProj/enfant`       | Initialise un enfant avec le nom du parent                     |
 | `POST /initProj/prive`        | Initialise un projet privé                                     |
 | `POST /supprProj`             | Supprime une page                                              |
 | `POST /Change/Nom`            | Change le titre d'une page                                     |
