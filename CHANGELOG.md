@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.0] - 12/06/2026
+
+- Initialisation d'un ptojet avec un parent
+
 ## [0.1.4] - 11/06/2026
 
 - Changements des bannieres par l'utilisateur
