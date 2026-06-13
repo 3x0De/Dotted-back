@@ -73,12 +73,15 @@ Ce repo fait partis du projet [Dotted](https://github.com/3x0De/Dotted-docs/)
 | `POST /Icon/change`           | Modifie le contenu de l'iconne                                 |
 | `POST /Banniere/change`       | Change le contenu de la banniere correspondante                |
 | `POST /Banniere/del`          | Supprime le contenu de la banniere correspondante              |
+| `GET /Image/charge/{Name}`    | Renvoie l'image demandée                                       |
+| `POST /Image/get`             | Enregistre l'image                                             |
 
 ## Note
 
 - Le principe pour le login est de stocker l'ip de l'utilisateur lors d'une connection.
 - Les pages peuvent être publiques ou privées
 - Les relations utilisateurs/pages sont gérées via la table LinkinPark
+- Les images sont stokés dans des fichiers séparés
 
 ## Installation
 
