@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from fastapi.responses import FileResponse
 from Script.func import *
-import shutil, os
+import shutil, os, uuid, mimetypes
 
 app = FastAPI()  
 
@@ -224,3 +224,31 @@ def supprBanniere(props: dict = Body(...)):
     Exec("UPDATE Pages SET Banniere = NULL WHERE Id = %s;", (props["id"],))
 
     return {"ok": True}
+
+
+@app.get("/Image/charge/{Name}")
+def changeBanniere(Name: str):
+    path = os.path.join("Image", "Img", Name)
+    if not os.path.isfile(path):
+        raise HTTPException(status_code=404, detail="Image non trouvée")
+
+    mime_type, _ = mimetypes.guess_type(path)
+    return FileResponse(
+        path,
+        media_type=mime_type or "application/octet-stream",
+        headers={"Cache-Control": "no-store, no-cache, must-revalidate"},
+    )
+
+@app.post("/Image/get")
+async def getImg(file: UploadFile = File(...)):
+    dest_dir = "Image/Img"
+    os.makedirs(dest_dir, exist_ok=True)
+
+    ext = file.filename.split(".")[-1]
+    file_name = f"{uuid.uuid4().hex}.{ext}"
+    dest_path = os.path.join(dest_dir, file_name)
+
+    with open(dest_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    return {"ok": True, "path": dest_path, "name": file_name}
