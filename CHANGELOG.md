@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.1] - 16/06/2026
+
+- Gestion des images
+
 ## [0.2.0] - 12/06/2026
 
 - Initialisation d'un ptojet avec un parent
