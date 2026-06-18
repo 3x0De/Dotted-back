@@ -239,8 +239,35 @@ def changeBanniere(Name: str):
         headers={"Cache-Control": "no-store, no-cache, must-revalidate"},
     )
 
+@app.get("/File/charge/{Name}")
+def charge_file(Name: str):
+    path = os.path.join("Image", "Img", Name)
+    if not os.path.isfile(path):
+        raise HTTPException(status_code=404, detail="Fichier non trouvé")
+
+    mime_type, _ = mimetypes.guess_type(path)
+    return FileResponse(
+        path,
+        media_type=mime_type or "application/octet-stream",
+        headers={"Cache-Control": "no-store, no-cache, must-revalidate"},
+    )
+
 @app.post("/Image/get")
 async def getImg(file: UploadFile = File(...)):
+    dest_dir = "Image/Img"
+    os.makedirs(dest_dir, exist_ok=True)
+
+    ext = file.filename.split(".")[-1]
+    file_name = f"{uuid.uuid4().hex}.{ext}"
+    dest_path = os.path.join(dest_dir, file_name)
+
+    with open(dest_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    return {"ok": True, "path": dest_path, "name": file_name}
+
+@app.post("/File/upload")
+async def upload_file(file: UploadFile = File(...)):
     dest_dir = "Image/Img"
     os.makedirs(dest_dir, exist_ok=True)
 
