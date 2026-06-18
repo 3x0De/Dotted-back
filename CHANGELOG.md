@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.2] - 19/06/2026
+
+- Ajout de la modification des fichiers
+
 ## [0.2.1] - 16/06/2026
 
 - Gestion des images
