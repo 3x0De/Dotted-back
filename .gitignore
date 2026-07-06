@@ -1,5 +1,15 @@
-__pycache__
-EncryptPv.py
+# --- SÉCURITÉ ---
+.env
+.env.local
+*.pem
+*.key
 
-Dot.sql
-/Image
+# --- FICHIERS TEMPORAIRES ET LOGS ---
+*.log
+tmp/
+log/
+.sass-cache/
+
+# --- POLUTION OS ---
+.DS_Store
+Thumbs.db
