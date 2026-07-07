@@ -7,7 +7,7 @@ CREATE TABLE Users (
     Username TEXT UNIQUE NOT NULL,
     Password TEXT,
     Email CITEXT UNIQUE,
-    IP INET[]
+    Token TEXT
 );
 
 CREATE TABLE Pages (

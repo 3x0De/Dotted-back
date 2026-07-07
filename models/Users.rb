@@ -1,17 +1,19 @@
 require_relative "DatabaseComunicator"
 require_relative "../services/HashMDP"
+require_relative "../services/GenerateTOKEN"
 
 class User < DatabaseComunicator
   attr_accessor :id, :username, :email, :password, :ip
 
-  def initialize(id)
+  def initialize(name, token)
     super("users")
-    @id = id
+    @username = name
 
-    requete = recup_val(false,"username, email", "id = ?", id)
+    requete = recup_val(false,"email, password", "username = ?", @username)
 
-    @username = requete ? requete[:username] : nil
     @email    = requete ? requete[:email] : nil
+    @password = requete ? requete[:password] : nil
+    @ip       = requete ? requete[:ip].tr('{}', '').split(',') : []
   end
 
 end
@@ -40,23 +42,18 @@ class UsersList < DatabaseComunicator
     end
   end
 
-  def add!(username, mdp, email, ip)
-    add_val!({username:username, password: hash_mdp(mdp), email:email, ip:ip})
+  def add!(username, mdp, email)
+    if recup_val(false, "count(*) as exist", "username = ? OR email = ?", username, email)[:exist] == 0
+       add_val!(username:username, password: hash_mdp(mdp), email:email, token: token(username, hash_mdp(mdp)))
+      return token(username, hash_mdp(mdp))
+    else return false
+    end
   end
 
-  def delete!(id, ip)
-    ipValide = recup_val(false, "ip", "id = ?", id)[:ip]
-    ipValide = ipValide.tr('{}', '').split(',')
+  def user?(username, mdp)
+    requete = recup_val(false,"token", "username = ? AND password = ?", username, hash_mdp(mdp))
 
-    supprime = false
-
-    ipValide.each do |el|
-      supprime = true if el === ip
-    end
-
-    delete_val!(id: id) if supprime
-
-    supprime
+    requete ? token(username, hash_mdp(mdp)) : false
   end
 
 end

@@ -26,16 +26,18 @@ class DatabaseComunicator
     end
 
     if condition != nil
-      query = "SELECT #{attribut} FROM #{@table} WHERE #{condition}"
+      query = "SELECT #{attribut} FROM #{@table} WHERE #{condition};"
     else
-      query = "SELECT #{attribut} FROM #{@table}"
+      query = "SELECT #{attribut} FROM #{@table};"
     end
+
 
     if multiple
         return DB.fetch(query, *args).all
     else return DB.fetch(query, *args).first
     end
   end
+
 
   def delete_val!(condition)
 
@@ -56,7 +58,7 @@ class DatabaseComunicator
 
       if db_type.include?("[]")
         elements = valeur.is_a?(Array) ? valeur : [valeur.to_s]
-        
+
         type_base = db_type.sub("[]", "")
 
         args[cle] = Sequel.lit("'{#{elements.join(',')}}'::#{type_base}[]")
@@ -79,6 +81,7 @@ class DatabaseComunicator
     colonnes_valides = DB[@table].columns
 
     args_list.all? do |nom_attribut|
+      next true if nom_attribut.include?("(")
       colonnes_valides.include?(nom_attribut.to_sym)
     end
   end
