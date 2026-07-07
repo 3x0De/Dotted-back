@@ -73,11 +73,6 @@ class DatabaseComunicator
 
       query = "UPDATE #{@table} SET #{set_clause} WHERE #{condition};"
 
-      puts "========== QUERY =========="
-      puts query
-      puts "Arguments : #{args.inspect}"
-      puts "==========================="
-
       DB[query, *args].update
       true
     else

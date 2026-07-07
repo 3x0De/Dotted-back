@@ -1,12 +1,10 @@
 require "sinatra/base"
 require "hashids"
-require_relative "db/db"
-require_relative "models/Users"
-require_relative "routes/User.rb"
+require_relative "routes/User"
+require_relative "routes/Page"
 
 
 class Application < Sinatra::Base
-
 
 
   get "/" do
