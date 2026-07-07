@@ -35,7 +35,7 @@ class Utilisateur < Sinatra::Base
         username = payload["username"]
         mdp      = payload["mdp"]
 
-        unless username&.match?(/\A\S+\z/) || username == "login"
+        unless username&.match?(/\A\S+\z/) || username == "login" || username == "bonjour"
             status 400
             return { message: "Nom d'utilisateur déjà pris", data: payload }.to_json
         end
@@ -84,6 +84,39 @@ class Utilisateur < Sinatra::Base
             status 401
             { message: "Identifiants incorrects, t'a cru berner qui ?" }.to_json
         end
+    end
+
+    # /bonjour
+
+    post "/bonjour" do
+        content_type :json
+
+        request_body = request.body.read
+
+        if request_body.strip.empty?
+            status 400
+            return { message: "Erreur : Le corps de la requête (JSON) est vide !" }.to_json
+        end
+
+        begin
+            payload = JSON.parse(request_body)
+        rescue JSON::ParserError
+            status 400
+            return { message: "Erreur : Le format JSON envoyé est invalide !" }.to_json
+        end
+
+        token = payload["token"]
+
+        user = User.initializeToken(token)
+
+        if user.valide
+            status 200
+            "Bonjour #{user.username}"
+        else
+            status 404
+            { message: "Utilisateur introuvable"}.to_json
+        end
+
     end
 
 

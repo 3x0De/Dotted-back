@@ -5,6 +5,14 @@ require_relative "../services/GenerateTOKEN"
 class User < DatabaseComunicator
   attr_reader :username, :valide, :existe
 
+  def self.initializeToken(token)
+    temp = allocate
+    temp.send(:initialize, nil, nil)
+    ligne = temp.send(:recup_val, false, "username", "token = ?", token)
+    return new(nil, nil) unless ligne
+    new(ligne[:username], token)
+  end
+
   def initialize(name, token)
     super("users")
 
@@ -18,6 +26,9 @@ class User < DatabaseComunicator
       @mdp = data ? data[:password] : nil
     end
   end
+
+
+
 
   def nameValid?(name)
     resultat = recup_val(false, "count(*) as val", "username = ?", name)
