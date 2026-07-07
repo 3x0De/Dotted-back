@@ -28,6 +28,8 @@ services:
     restart: on-failure
     environment:
       DATABASE_URL: ${DATABASE_URL}
+      HASH_URL: ${HASH_URL}
+      HASH_PASSWORLD: ${HASH_PASSWORLD}
 
 volumes:
   postgres_data:

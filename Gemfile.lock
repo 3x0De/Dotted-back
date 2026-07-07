@@ -4,6 +4,7 @@ GEM
     base64 (0.3.0)
     bigdecimal (4.1.2)
     ffi (1.17.4-x86_64-linux-gnu)
+    hashids (1.0.6)
     json (2.20.0)
     listen (3.10.0)
       logger
@@ -12,6 +13,7 @@ GEM
     logger (1.7.0)
     mustermann (3.1.1)
     nio4r (2.7.5)
+    openssl (3.2.2)
     pg (1.6.3-x86_64-linux)
     puma (8.0.2)
       nio4r (~> 2.0)
@@ -39,13 +41,15 @@ GEM
       rack-protection (= 4.2.1)
       rack-session (>= 2.0.0, < 3)
       tilt (~> 2.0)
-    tilt (2.7.0)
+    tilt (2.8.0)
 
 PLATFORMS
   x86_64-linux-gnu
 
 DEPENDENCIES
+  hashids
   json
+  openssl
   pg
   puma
   rackup
