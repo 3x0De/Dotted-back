@@ -6,7 +6,6 @@ CREATE TABLE Users (
     Id SERIAL PRIMARY KEY,
     Username TEXT UNIQUE NOT NULL,
     Password TEXT,
-    Email CITEXT UNIQUE,
     Token TEXT
 );
 

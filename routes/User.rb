@@ -4,9 +4,9 @@ require_relative '../models/Users'
 
 class Utilisateur < Sinatra::Base
 
-    # /User
+    # /
 
-    get "/User" do
+    get "/" do
         content_type :json
 
         resp = UsersList.new
@@ -15,7 +15,7 @@ class Utilisateur < Sinatra::Base
         resp.liste_path.to_json
     end
 
-    put "/User" do
+    put "/" do
         content_type :json
 
         request_body = request.body.read
@@ -33,33 +33,28 @@ class Utilisateur < Sinatra::Base
         end
 
         username = payload["username"]
-        email    = payload["email"]
         mdp      = payload["mdp"]
 
         unless username&.match?(/\A\S+\z/)
             status 400
             return { message: "Nom d'utilisateur incorrect", data: payload }.to_json
         end
-        unless email&.match?(/\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i)
-            status 400
-            return { message: "Nom d'email incorrect", data: payload }.to_json
-        end
 
         gestionnaire = UsersList.new
-        requete = gestionnaire.add!(username, mdp, email)
+        requete = gestionnaire.add!(username, mdp)
 
         if requete
             status 201
             { message: "Utilisateur créé avec succès !", data:  requete }.to_json
         else 
             status 409
-            { message: "Un autre utilisateur a le meme nom ou utilise la même email" }.to_json
+            { message: "Un autre utilisateur a le meme nom" }.to_json
         end
     end
 
-    # /User/login
+    # /login
 
-    post "/User/login" do
+    post "/login" do
         content_type :json
 
         request_body = request.body.read
@@ -89,6 +84,53 @@ class Utilisateur < Sinatra::Base
             status 401
             { message: "Identifiants incorrects, t'a cru berner qui ?" }.to_json
         end
+    end
+
+
+    # /:name
+
+    post "/:name" do
+
+        content_type :json
+
+        request_body = request.body.read
+
+        if request_body.strip.empty?
+            status 400
+            return { message: "Erreur : Le corps de la requête (JSON) est vide !" }.to_json
+        end
+
+        begin
+            payload = JSON.parse(request_body)
+        rescue JSON::ParserError
+            status 400
+            return { message: "Erreur : Le format JSON envoyé est invalide !" }.to_json
+        end
+
+        username = params[:name]
+        token    = payload["token"]
+        type     = payload["type"]
+        nouveau  = payload["nouveau"]
+
+        user = User.new username, token
+
+
+        if user.valide
+            if type == "username"
+                user.username = nouveau
+
+                status 200
+                return { message: "Le nom d'utilisateur a été mis a jour" }.to_json
+
+            elsif type == "password"
+                user.password = nouveau
+
+                status 200
+                return { message: "Le nom mot de passe a été mis a jour" }.to_json
+            end
+        else "pas bon"
+        end
+
     end
 
 end

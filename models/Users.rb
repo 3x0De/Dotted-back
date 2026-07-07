@@ -3,17 +3,41 @@ require_relative "../services/HashMDP"
 require_relative "../services/GenerateTOKEN"
 
 class User < DatabaseComunicator
-  attr_accessor :id, :username, :email, :password, :ip
+  attr_reader :username, :valide
 
   def initialize(name, token)
     super("users")
-    @username = name
 
-    requete = recup_val(false,"email, password", "username = ?", @username)
 
-    @email    = requete ? requete[:email] : nil
-    @password = requete ? requete[:password] : nil
-    @ip       = requete ? requete[:ip].tr('{}', '').split(',') : []
+    resultat = recup_val(false, "count(*) AS valide", "token = ? AND username = ?", token, name)
+    @valide = resultat && resultat[:valide].to_i == 1
+
+    if @valide
+      data = recup_val(false,"password", "username = ?", @username)
+      @username = name
+      @mdp = data ? data[:password] : nil
+    end
+  end
+
+  def username=(new_val)
+    return unless @valide
+
+    nouveau_token = token(new_val, @username)
+
+    if change_val!(["username", "token"], "username = ?", new_val, nouveau_token, @username)
+      @username = new_val
+    end
+  end
+
+  def password=(new_val)
+    return unless @valide
+
+    nouveau_mdp_hash = hash_mdp(new_val)
+    nouveau_token = token(@username, nouveau_mdp_hash)
+
+    if change_val!(["password", "token"], "username = ?", nouveau_mdp_hash, nouveau_token, @username)
+      @mdp = nouveau_mdp_hash
+    end
   end
 
 end
@@ -42,9 +66,9 @@ class UsersList < DatabaseComunicator
     end
   end
 
-  def add!(username, mdp, email)
-    if recup_val(false, "count(*) as exist", "username = ? OR email = ?", username, email)[:exist] == 0
-       add_val!(username:username, password: hash_mdp(mdp), email:email, token: token(username, hash_mdp(mdp)))
+  def add!(username, mdp)
+    if recup_val(false, "count(*) as exist", "username = ?", username)[:exist] == 0
+       add_val!(username:username, password: hash_mdp(mdp), token: token(username, hash_mdp(mdp)))
       return token(username, hash_mdp(mdp))
     else return false
     end
@@ -53,7 +77,7 @@ class UsersList < DatabaseComunicator
   def user?(username, mdp)
     requete = recup_val(false,"token", "username = ? AND password = ?", username, hash_mdp(mdp))
 
-    requete ? token(username, hash_mdp(mdp)) : false
+    requete ? requete[:token] : false
   end
 
 end

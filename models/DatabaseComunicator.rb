@@ -55,14 +55,6 @@ class DatabaseComunicator
       next unless schema[colonne_sym]
 
       db_type = schema[colonne_sym][:db_type].to_s
-
-      if db_type.include?("[]")
-        elements = valeur.is_a?(Array) ? valeur : [valeur.to_s]
-
-        type_base = db_type.sub("[]", "")
-
-        args[cle] = Sequel.lit("'{#{elements.join(',')}}'::#{type_base}[]")
-      end
     end
 
     begin
@@ -70,6 +62,27 @@ class DatabaseComunicator
     rescue Sequel::DatabaseError => e
       puts "/!\\ Erreur d'insertion dans la table #{@table} : #{e.message}"
       raise e
+    end
+  end
+
+  def change_val!(attributs, condition, *args)
+    liste_attributs = Array(attributs).map(&:to_s)
+
+    if valid_arg?(liste_attributs)
+      set_clause = liste_attributs.map { |att| "#{att} = ?" }.join(", ")
+
+      query = "UPDATE #{@table} SET #{set_clause} WHERE #{condition};"
+
+      puts "========== QUERY =========="
+      puts query
+      puts "Arguments : #{args.inspect}"
+      puts "==========================="
+
+      DB[query, *args].update
+      true
+    else
+      puts "/!\\ Attribut(s) invalide(s) pour la table '#{@table}'."
+      false
     end
   end
 

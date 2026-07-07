@@ -6,16 +6,19 @@ require_relative "routes/User.rb"
 
 
 class Application < Sinatra::Base
-  set :bind, '0.0.0.0'
-  set :port, 4567
 
-  use Utilisateur,  map: '/User'
+
 
   get "/" do
-
     "Hello  World!"
   end
 
-  run! if app_file == $0
+  not_found do
+    content_type :json
+
+    status 404
+    { error: "Ressource introuvable", message: "Baby, je lève mon verre et je danse tout seul dans l'appart. Tu reviendras hanter mes rêves, t'es une erreur 404" }.to_json
+  end
+
 
 end
