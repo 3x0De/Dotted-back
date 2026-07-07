@@ -24,6 +24,7 @@ class UsersList < DatabaseComunicator
   def initialize()
     super("users")
 
+
     @liste = []
 
     liste = recup_val(true,"username")
@@ -41,6 +42,21 @@ class UsersList < DatabaseComunicator
 
   def add!(username, mdp, email, ip)
     add_val!({username:username, password: hash_mdp(mdp), email:email, ip:ip})
+  end
+
+  def delete!(id, ip)
+    ipValide = recup_val(false, "ip", "id = ?", id)[:ip]
+    ipValide = ipValide.tr('{}', '').split(',')
+
+    supprime = false
+
+    ipValide.each do |el|
+      supprime = true if el === ip
+    end
+
+    delete_val!(id: id) if supprime
+
+    supprime
   end
 
 end

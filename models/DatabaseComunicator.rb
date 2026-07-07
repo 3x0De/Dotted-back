@@ -37,6 +37,12 @@ class DatabaseComunicator
     end
   end
 
+  def delete_val!(condition)
+
+    DB[@table].where(condition).delete
+
+  end
+
   def add_val!(args = {})
     return false if args.empty?
 

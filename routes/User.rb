@@ -42,4 +42,22 @@ class Utilisateur < Sinatra::Base
         { message: "Utilisateur mis à jour avec succès !", data: payload }.to_json
     end
 
+    delete "/User" do
+        content_type :json
+
+        request_body = request.body.read
+        payload = JSON.parse(request_body)
+
+        id = payload["id"]
+        ip = request.ip
+
+        gestionnaire = UsersList.new
+
+        if gestionnaire.delete!(id, ip)
+            { message: "Utilisateur supprimé avec succès !"}
+        else
+            { message: "Utilisateur non supprimé avec succès !"}
+        end
+    end
+
 end
