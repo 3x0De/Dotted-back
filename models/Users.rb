@@ -3,7 +3,7 @@ require_relative "../services/HashMDP"
 require_relative "../services/GenerateTOKEN"
 
 class User < DatabaseComunicator
-  attr_reader :username, :valide
+  attr_reader :username, :valide, :existe
 
   def initialize(name, token)
     super("users")
@@ -13,16 +13,21 @@ class User < DatabaseComunicator
     @valide = resultat && resultat[:valide].to_i == 1
 
     if @valide
-      data = recup_val(false,"password", "username = ?", @username)
       @username = name
+      data = recup_val(false,"password", "username = ?", @username)
       @mdp = data ? data[:password] : nil
     end
+  end
+
+  def nameValid?(name)
+    resultat = recup_val(false, "count(*) as val", "username = ?", name)
+    resultat && resultat[:val] == 1
   end
 
   def username=(new_val)
     return unless @valide
 
-    nouveau_token = token(new_val, @username)
+    nouveau_token = token(new_val, @mdp)
 
     if change_val!(["username", "token"], "username = ?", new_val, nouveau_token, @username)
       @username = new_val
@@ -37,6 +42,12 @@ class User < DatabaseComunicator
 
     if change_val!(["password", "token"], "username = ?", nouveau_mdp_hash, nouveau_token, @username)
       @mdp = nouveau_mdp_hash
+    end
+  end
+
+  def delete!()
+    if @valide
+      delete_val!({username: @username})
     end
   end
 

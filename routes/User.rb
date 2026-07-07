@@ -35,9 +35,9 @@ class Utilisateur < Sinatra::Base
         username = payload["username"]
         mdp      = payload["mdp"]
 
-        unless username&.match?(/\A\S+\z/)
+        unless username&.match?(/\A\S+\z/) || username == "login"
             status 400
-            return { message: "Nom d'utilisateur incorrect", data: payload }.to_json
+            return { message: "Nom d'utilisateur déjà pris", data: payload }.to_json
         end
 
         gestionnaire = UsersList.new
@@ -128,7 +128,54 @@ class Utilisateur < Sinatra::Base
                 status 200
                 return { message: "Le nom mot de passe a été mis a jour" }.to_json
             end
-        else "pas bon"
+        else
+            if user.nameValid?(username)
+                status 401
+                { message: "Je vais porter plainte pour usurpation d'identité là" }.to_json
+            else
+                status 400
+                { message: "non." }.to_json
+            end
+        end
+
+    end
+
+    delete "/:name" do
+
+        content_type :json
+
+        request_body = request.body.read
+
+        if request_body.strip.empty?
+            status 400
+            return { message: "Erreur : Le corps de la requête (JSON) est vide !" }.to_json
+        end
+
+        begin
+            payload = JSON.parse(request_body)
+        rescue JSON::ParserError
+            status 400
+            return { message: "Erreur : Le format JSON envoyé est invalide !" }.to_json
+        end
+
+        username = params[:name]
+        token    = payload["token"]
+
+        user = User.new username, token
+
+
+        if user.valide
+            user.delete!
+            status 200
+            { message: "Bye bye TT" }.to_json
+        else
+            if user.nameValid?(username)
+                status 400
+                { message: "Tu te prends pour qui a vouloir supprimer un compte qu'est pas à toi ?" }.to_json
+            else
+                status 400
+                { message: "non." }.to_json
+            end
         end
 
     end
