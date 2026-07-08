@@ -25,7 +25,7 @@ class Page < Sinatra::Base
             return { message: "Erreur : Le format JSON envoyé est invalide !" }.to_json
         end
 
-        token  = payload["token"]
+        token  = request.cookies['DottedClub']
         racine = payload["racine"]
         prive  = payload["prive"]
 
@@ -62,7 +62,7 @@ class Page < Sinatra::Base
             return { message: "Erreur : Le format JSON envoyé est invalide !" }.to_json
         end
 
-        token      = payload["token"]
+        token      = request.cookies['DottedClub']
         visibilite = payload["visibilite"]
         parent     = payload["parent"]
 
@@ -77,7 +77,8 @@ class Page < Sinatra::Base
             { message: "page créé avec succès !", data: hash_url(requete) }.to_json
         else
             status 401
-            { message: "No bitches ?" }
+            { message: "No bitches ?" }.to_json
         end
     end
+
 end

@@ -78,8 +78,16 @@ class Utilisateur < Sinatra::Base
         valid = gestionnaire.user?(username, mdp)
 
         if valid
+            response.set_cookie('DottedClub', {
+                value: valid,
+                path: '/',
+                expires: Time.now + 3600,
+                http_only: true,
+                secure: true,
+                same_site: :lax
+            })
             status 200
-            { message: "Identifiants corrects, voici le token", data: valid }.to_json
+            { message: "Identifiants corrects" }.to_json
         else
             status 401
             { message: "Identifiants incorrects, t'a cru berner qui ?" }.to_json
@@ -88,24 +96,10 @@ class Utilisateur < Sinatra::Base
 
     # /bonjour
 
-    post "/bonjour" do
+    get "/bonjour" do
         content_type :json
 
-        request_body = request.body.read
-
-        if request_body.strip.empty?
-            status 400
-            return { message: "Erreur : Le corps de la requête (JSON) est vide !" }.to_json
-        end
-
-        begin
-            payload = JSON.parse(request_body)
-        rescue JSON::ParserError
-            status 400
-            return { message: "Erreur : Le format JSON envoyé est invalide !" }.to_json
-        end
-
-        token = payload["token"]
+        token = request.cookies['DottedClub']
 
         user = User.initializeToken(token)
 
@@ -140,8 +134,8 @@ class Utilisateur < Sinatra::Base
             return { message: "Erreur : Le format JSON envoyé est invalide !" }.to_json
         end
 
+        token    = request.cookies['DottedClub']
         username = params[:name]
-        token    = payload["token"]
         type     = payload["type"]
         nouveau  = payload["nouveau"]
 
@@ -177,22 +171,8 @@ class Utilisateur < Sinatra::Base
 
         content_type :json
 
-        request_body = request.body.read
-
-        if request_body.strip.empty?
-            status 400
-            return { message: "Erreur : Le corps de la requête (JSON) est vide !" }.to_json
-        end
-
-        begin
-            payload = JSON.parse(request_body)
-        rescue JSON::ParserError
-            status 400
-            return { message: "Erreur : Le format JSON envoyé est invalide !" }.to_json
-        end
-
         username = params[:name]
-        token    = payload["token"]
+        token    = request.cookies['DottedClub']
 
         user = User.new username, token
 
