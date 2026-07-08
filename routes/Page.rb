@@ -25,10 +25,23 @@ class Page < Sinatra::Base
             return { message: "Erreur : Le format JSON envoyé est invalide !" }.to_json
         end
 
-        token = payload["token"]
+        token  = payload["token"]
+        racine = payload["racine"]
+        prive  = payload["prive"]
 
         gestion = PagesList.new token
 
-        gestion.liste_path.to_json
+
+        unless prive
+            if racine
+                gestion.liste_path_racine_public.to_json
+            else gestion.liste_path_public.to_json
+            end
+        else
+            if racine
+                gestion.liste_path_racine_prive.to_json
+            else gestion.liste_path.to_json
+            end
+        end
     end
 end
