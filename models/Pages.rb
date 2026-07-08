@@ -27,6 +27,10 @@ class PagesList < DatabaseComunicator
     def initialize(token)
         super("pages")
 
+        @userId = DB.fetch("SELECT id FROM Users WHERE token = ?;", token).first
+
+        @userId = @userId ? @userId[:id] : nil
+
         @liste = []
         @liste_public = []
         @liste_racine_public = []
@@ -38,9 +42,9 @@ class PagesList < DatabaseComunicator
         @liste_path_racine_public = []
         @liste_path_racine_prive = []
 
-        query = "SELECT P.id FROM Pages P JOIN LinkinPark L ON L.pageId = P.id JOIN Users U ON U.id = L.userId WHERE U.token = ? AND L.Visibilite;"
+        query = "SELECT P.id FROM Pages P JOIN LinkinPark L ON L.pageId = P.id WHERE L.userid = ? AND L.Visibilite;"
 
-        requete = DB.fetch(query, token).all
+        requete = DB.fetch(query, @userId).all
 
         requete.each do |el|
             @liste_public.push hash_url el[:id]
@@ -51,9 +55,9 @@ class PagesList < DatabaseComunicator
         end
 
 
-        query = "SELECT P.id FROM Pages P JOIN LinkinPark L ON L.pageId = P.id JOIN Users U ON U.id = L.userId WHERE U.token = ?;"
+        query = "SELECT P.id FROM Pages P JOIN LinkinPark L ON L.pageId = P.id WHERE L.userid = ?;"
 
-        requete = DB.fetch(query, token).all
+        requete = DB.fetch(query, @userId).all
 
         requete.each do |el|
             @liste.push hash_url el[:id]
@@ -63,9 +67,9 @@ class PagesList < DatabaseComunicator
             @liste_path.push "/Page/#{el}"
         end
 
-        query = "SELECT P.id FROM Pages P JOIN LinkinPark L ON L.pageId = P.id JOIN Users U ON U.id = L.userId WHERE U.token = ? AND L.Visibilite AND P.Parent IS NULL;"
+        query = "SELECT P.id FROM Pages P JOIN LinkinPark L ON L.pageId = P.id JOIN Users U ON U.id = L.userId WHERE U.id = ? AND L.Visibilite AND P.Parent IS NULL;"
 
-        requete = DB.fetch(query, token).all
+        requete = DB.fetch(query, @userId).all
 
         requete.each do |el|
             @liste_racine_public.push hash_url el[:id]
@@ -75,9 +79,9 @@ class PagesList < DatabaseComunicator
             @liste_path_racine_public.push "/Page/#{el}"
         end
 
-        query = "SELECT P.id FROM Pages P JOIN LinkinPark L ON L.pageId = P.id JOIN Users U ON U.id = L.userId WHERE U.token = ? AND NOT L.Visibilite AND P.Parent IS NULL;"
+        query = "SELECT P.id FROM Pages P JOIN LinkinPark L ON L.pageId = P.id JOIN Users U ON U.id = L.userId WHERE U.id = ? AND NOT L.Visibilite AND P.Parent IS NULL;"
 
-        requete = DB.fetch(query, token).all
+        requete = DB.fetch(query, @userId).all
 
         requete.each do |el|
             @liste_racine_prive.push hash_url el[:id]
@@ -87,6 +91,18 @@ class PagesList < DatabaseComunicator
             @liste_path_racine_prive.push "/Page/#{el}"
         end
 
+    end
+
+    def add!(visibilite = true, parent = nil)
+        return false if @userId.nil?
+
+        add_val!({contenu: '{"id": 0, "type": "STATE.col", "content": [{"id": 1, "type": null, "content": "1"}]}', parent: parent })
+
+        id = recup_val(false, "max(id) as max")[:max]
+
+        DB[:linkinpark].insert(userid: @userId, pageid: id, visibilite: visibilite ? visibilite : true)
+
+        id
     end
 
 

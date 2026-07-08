@@ -44,4 +44,40 @@ class Page < Sinatra::Base
             end
         end
     end
+
+    put "/" do
+        content_type :json
+
+        request_body = request.body.read
+
+        if request_body.strip.empty?
+            status 400
+            return { message: "Erreur : Le corps de la requête (JSON) est vide !" }.to_json
+        end
+
+        begin
+            payload = JSON.parse(request_body)
+        rescue JSON::ParserError
+            status 400
+            return { message: "Erreur : Le format JSON envoyé est invalide !" }.to_json
+        end
+
+        token      = payload["token"]
+        visibilite = payload["visibilite"]
+        parent     = payload["parent"]
+
+        parent = parent ? unhash_url(parent) : nil
+
+        gestion = PagesList.new token
+
+        requete = gestion.add!(visibilite, parent)
+
+        if requete
+            status 201
+            { message: "page créé avec succès !", data: hash_url(requete) }.to_json
+        else
+            status 401
+            { message: "No bitches ?" }
+        end
+    end
 end
