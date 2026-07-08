@@ -35,7 +35,7 @@ class Utilisateur < Sinatra::Base
         username = payload["username"]
         mdp      = payload["mdp"]
 
-        unless username&.match?(/\A\S+\z/) || username == "login" || username == "bonjour"
+        unless username&.match?(/\A\S+\z/) || username == "login" || username == "bonjour" || username == "logout"
             status 400
             return { message: "Nom d'utilisateur déjà pris", data: payload }.to_json
         end
@@ -92,6 +92,17 @@ class Utilisateur < Sinatra::Base
             status 401
             { message: "Identifiants incorrects, t'a cru berner qui ?" }.to_json
         end
+    end
+
+    # /logout
+
+    post "/logout" do
+        content_type :JSON
+
+        response.delete_cookie('DottedClub', path: '/')
+
+        status 200
+        { message: "Déconnexion réussie. Tu vas me manquer <3" }.to_json
     end
 
     # /bonjour
