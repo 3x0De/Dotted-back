@@ -3,19 +3,28 @@ require_relative "DatabaseComunicator"
 
 class Pages < DatabaseComunicator
 
-    attr_reader :Title, :Icon, :Banniere, :Contenu, :Parent
+    attr_reader :valide, :Title, :Icon, :Banniere, :Contenu, :Parent
 
-    def initialize(id)
+    def initialize(token, id)
         super("pages")
 
-        query = recup_val(false, "title, icon, banniere, contenu, parent", "id = ?", unhash_url(id))
+        
+        @userId = DB.fetch("SELECT id FROM Users JOIN LinkinPark ON id = userId WHERE token = ? AND pageId = ?;", token, id).first
+
+        @userId = @userId ? @userId[:id] : nil
+
+        @valide = !@userId.nil?
+
+        if @valide
+            query = recup_val(false, "title, icon, banniere, contenu, parent", "id = ?", id)
 
 
-        @Title    = query ? query[:title] : nil
-        @Icon     = query ? query[:title] : nil
-        @Banniere = query ? query[:title] : nil
-        @Contenu  = query ? query[:title] : nil
-        @Parent   = query ? query[:title] : nil
+            @Title    = query ? query[:title] : nil
+            @Icon     = query ? query[:icon] : nil
+            @Banniere = query ? query[:banniere] : nil
+            @Contenu  = query ? query[:contenu] : nil
+            @Parent   = query ? query[:parent] : nil
+        end
     end
 
 end

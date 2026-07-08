@@ -11,4 +11,4 @@ log_file.sync = true
 DB = Sequel.connect(ENV['DATABASE_URL'], logger: Logger.new(log_file))
 
 Sequel.extension :pg_array_ops
-DB.extension :pg_array
+DB.extension :pg_array, :pg_json

@@ -81,4 +81,25 @@ class Page < Sinatra::Base
         end
     end
 
+    # /:id
+
+    get "/:id" do
+
+        content_type :json
+
+        id    = unhash_url params[:id]
+        token = request.cookies['DottedClub']
+
+
+        gestion = Pages.new token, id
+
+        if gestion.valide
+            status 200
+            { title: gestion.Title, icon: gestion.Icon, banniere: gestion.Banniere, contenu: gestion.Contenu }.to_json
+        else
+            status 400
+            { message: "Soit tu veux me berner, soit tu t'es trompé" }.to_json
+        end
+    end
+
 end
