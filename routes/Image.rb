@@ -31,4 +31,21 @@ class Image < Sinatra::Base
         end
     end
 
+    # /:name
+
+    get '/:name' do
+
+        path = File.join('Image', params[:name])
+
+        if File.exist?(path)
+            status 200
+            send_file path
+        else
+            content_type :json
+            status 404
+            { message: "Fichier introuvable" }.to_json
+        end
+
+    end
+
 end
