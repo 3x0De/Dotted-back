@@ -145,8 +145,30 @@ class Page < Sinatra::Base
                 status 200
                 {message: "Le contenu est mis a jour avec suces"}.to_json
             end
-        else {message:"oinoin"}.to_json
+        else
+            status 404
+            { message: 'connais pas ¯|_(ツ)_/¯' }.to_json
         end
+    end
+
+    delete "/:id" do
+
+        content_type :json
+
+        id    = unhash_url params[:id]
+        token = request.cookies['DottedClub']
+
+        page = Pages.new token, id
+
+        if page.valide
+            page.delete!
+            status 200
+            { message: "Bye Bye petit papillon" }.to_json
+        else
+            status 400
+            { message: "Tu te prends pour qui ?" }.to_json
+        end
+
     end
 
 end

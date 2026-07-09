@@ -59,6 +59,12 @@ class Pages < DatabaseComunicator
         end
     end
 
+    def delete!()
+        if @valide
+            delete_val!({id: @id})
+        end
+    end
+
 end
 
 class PagesList < DatabaseComunicator
