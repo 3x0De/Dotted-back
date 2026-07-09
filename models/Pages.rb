@@ -8,6 +8,8 @@ class Pages < DatabaseComunicator
     def initialize(token, id)
         super("pages")
 
+        @token = token
+
         @userId = DB.fetch("SELECT id FROM Users JOIN LinkinPark ON id = userId WHERE token = ? AND pageId = ?;", token, id).first
 
         @userId = @userId ? @userId[:id] : nil
@@ -63,6 +65,16 @@ class Pages < DatabaseComunicator
         if @valide
             delete_val!({id: @id})
         end
+    end
+
+    def path()
+        if @Parent.nil?
+            return [{ name: @Title, path: hash_url(@id) }]
+        end
+
+        parent_page = Pages.new(@token, @Parent)
+
+        parent_page.path << { name: @Title, path: hash_url(@id) }
     end
 
 end

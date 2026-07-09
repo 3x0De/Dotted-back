@@ -171,4 +171,25 @@ class Page < Sinatra::Base
 
     end
 
+    # /:id/Path
+
+    get "/:id/Path" do
+
+        content_type :json
+
+        id    = unhash_url params[:id]
+        token = request.cookies['DottedClub']
+
+        page = Pages.new token, id
+
+        if page.valide
+            status 200
+            page.path().to_json
+        else
+            status 401
+            { message: "Deso t'a pas les droits" }.to_json
+        end
+
+    end
+
 end
