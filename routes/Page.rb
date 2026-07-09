@@ -102,4 +102,51 @@ class Page < Sinatra::Base
         end
     end
 
+    post "/:id" do
+        content_type :json
+
+        request_body = request.body.read
+
+        if request_body.strip.empty?
+            status 400
+            return { message: "Erreur : Le corps de la requête (JSON) est vide !" }.to_json
+        end
+
+        begin
+            payload = JSON.parse(request_body)
+        rescue JSON::ParserError
+            status 400
+            return { message: "Erreur : Le format JSON envoyé est invalide !" }.to_json
+        end
+
+
+        id       = unhash_url params[:id]
+        token    = request.cookies['DottedClub']
+        type     = payload["type"]
+        nouveau  = payload["nouveau"]
+
+        page = Pages.new token, id
+
+        if page.valide
+            if type == "titre"
+                page.Title = nouveau
+                status 200
+                {message: "Le titre est mis a jour avec suces"}.to_json
+            elsif type == "icon"
+                page.Icon = nouveau
+                status 200
+                {message: "L'iconne est mise a jour avec suces"}.to_json
+            elsif type == "banniere"
+                page.Banniere = nouveau
+                status 200
+                {message: "La banniere est mise a jour avec suces"}.to_json
+            elsif type == "contenu"
+                page.Contenu = nouveau
+                status 200
+                {message: "Le contenu est mis a jour avec suces"}.to_json
+            end
+        else {message:"oinoin"}.to_json
+        end
+    end
+
 end

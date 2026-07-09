@@ -8,7 +8,6 @@ class Pages < DatabaseComunicator
     def initialize(token, id)
         super("pages")
 
-        
         @userId = DB.fetch("SELECT id FROM Users JOIN LinkinPark ON id = userId WHERE token = ? AND pageId = ?;", token, id).first
 
         @userId = @userId ? @userId[:id] : nil
@@ -24,6 +23,39 @@ class Pages < DatabaseComunicator
             @Banniere = query ? query[:banniere] : nil
             @Contenu  = query ? query[:contenu] : nil
             @Parent   = query ? query[:parent] : nil
+            @id       = id
+        end
+    end
+
+    def Title=(val)
+        if @valide
+            if change_val!("title", "id = ?", val, @id)
+                @Title = val
+            end
+        end
+    end
+
+    def Icon=(val)
+        if @valide
+            if change_val!("icon", "id = ?", val, @id)
+                @Icon = val
+            end
+        end
+    end
+
+    def Banniere=(val)
+        if @valide
+            if change_val!("banniere", "id = ?", val, @id)
+                @Banniere = val
+            end
+        end
+    end
+
+    def Contenu=(val)
+        if @valide
+            if change_val!("contenu", "id = ?", val.to_json, @id)
+                @Contenu = val
+            end
         end
     end
 
