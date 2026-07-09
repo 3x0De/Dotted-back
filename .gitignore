@@ -9,6 +9,7 @@
 tmp/
 log/
 .sass-cache/
+Images/
 
 # --- POLUTION OS ---
 .DS_Store

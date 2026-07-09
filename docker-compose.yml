@@ -30,7 +30,8 @@ services:
       DATABASE_URL: ${DATABASE_URL}
       HASH_URL: ${HASH_URL}
       HASH_PASSWORLD: ${HASH_PASSWORLD}
-      NAME_HASH_ID: ${NAME_HASH_ID}
+      HASH_ID: ${HASH_ID}
+      HASH_IMAGE: ${HASH_IMAGE}
 
 volumes:
   postgres_data:

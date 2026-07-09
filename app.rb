@@ -2,6 +2,7 @@ require "sinatra/base"
 require "hashids"
 require_relative "routes/User"
 require_relative "routes/Page"
+require_relative "routes/Image"
 
 
 class Application < Sinatra::Base
