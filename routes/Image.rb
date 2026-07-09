@@ -48,4 +48,26 @@ class Image < Sinatra::Base
 
     end
 
+    delete '/:name' do
+
+        content_type :json
+
+        path = File.join('Image', params[:name])
+
+        if File.exist?(path)
+            begin
+                File.delete(path)
+                status 200
+                { success: true, message: "L'image a été supprimée.😔😔" }.to_json
+            rescue StandardError => e
+                status 500
+                { success: false, error: "Impossible de supprimer le fichier : #{e.message}" }.to_json
+            end
+        else
+            status 404
+            { message: "Fichier introuvable" }.to_json
+        end
+
+    end
+
 end
