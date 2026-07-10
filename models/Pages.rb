@@ -159,7 +159,7 @@ class PagesList < DatabaseComunicator
 
         id = recup_val(false, "max(id) as max")[:max]
 
-        DB[:linkinpark].insert(userid: @userId, pageid: id, visibilite: visibilite ? visibilite : true)
+        DB[:linkinpark].insert(userid: @userId, pageid: id, visibilite: visibilite)
 
         id
     end

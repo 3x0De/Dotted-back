@@ -116,7 +116,7 @@ class Utilisateur < Sinatra::Base
 
         if user.valide
             status 200
-            "Bonjour #{user.username}"
+            { message:"Bonjour #{user.username}" }.to_json
         else
             status 404
             { message: "Utilisateur introuvable"}.to_json
