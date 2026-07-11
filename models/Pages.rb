@@ -155,7 +155,7 @@ class PagesList < DatabaseComunicator
     def add!(visibilite = true, parent = nil)
         return false if @userId.nil?
 
-        add_val!({contenu: '{"id": 0, "type": "STATE.col", "content": [{"id": 1, "type": null, "content": "1"}]}', parent: parent })
+        add_val!({contenu: '{"id": 0, "type": "column", "content": [{"id": 1, "type": null, "content": ""}]}', parent: parent })
 
         id = recup_val(false, "max(id) as max")[:max]
 
