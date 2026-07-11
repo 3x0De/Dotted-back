@@ -1,7 +1,7 @@
 INSERT INTO "users" ("username", "password", "token") VALUES ('test', 'test', 'test');
 
 INSERT INTO "pages" ("contenu", "parent") VALUES ('{"id": 0, "type": "column", "content": [{"id": 1, "type": null, "content": ""}]}', NULL);
-INSERT INTO "pages" ("contenu", "parent") VALUES ('{"id": 0, "type": "column", "content": [{"id": 1, "type": null, "content": "aaa"}]}', NULL);
+INSERT INTO "pages" ("contenu", "parent") VALUES ('{"id": 0, "type": "column", "content": [{"id": 1, "type": null, "content": ""}]}', NULL);
 INSERT INTO "pages" ("contenu", "parent") VALUES ('{"id": 0, "type": "column", "content": [{"id": 1, "type": null, "content": ""}]}', NULL);
 INSERT INTO "pages" ("contenu", "parent") VALUES ('{"id": 0, "type": "column", "content": [{"id": 1, "type": null, "content": ""}]}', NULL);
 INSERT INTO "pages" ("contenu", "parent") VALUES ('{"id": 0, "type": "column", "content": [{"id": 1, "type": null, "content": ""}]}', 1);

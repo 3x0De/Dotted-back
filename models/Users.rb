@@ -91,6 +91,10 @@ class UsersList < DatabaseComunicator
   def add!(username, mdp)
     if recup_val(false, "count(*) as exist", "username = ?", username)[:exist] == 0
        add_val!(username:username, password: hash_mdp(mdp), token: token(username, hash_mdp(mdp)))
+
+       userId = recup_val(false, "id", "username = ?", username)[:id]
+
+       DB[:linkinpark].insert(userid: userId, pageid: 1, visibilite: true)
       return token(username, hash_mdp(mdp))
     else return false
     end

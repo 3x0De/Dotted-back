@@ -31,6 +31,8 @@ class DatabaseComunicator
       query = "SELECT #{attribut} FROM #{@table};"
     end
 
+    puts query
+
 
     if multiple
         return DB.fetch(query, *args).all
