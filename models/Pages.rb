@@ -62,7 +62,7 @@ class Pages < DatabaseComunicator
     end
 
     def delete!()
-        if @valide
+        if @valide && @id != 1
             delete_val!({id: @id})
         end
     end
