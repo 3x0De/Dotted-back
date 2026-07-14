@@ -1,88 +1,99 @@
 # Dotted-back
 
-Ce repo fait partis du projet [Dotted](https://github.com/3x0De/Dotted-docs/)
+Ce repo fait partie du projet [Dotted](https://github.com/3x0De/Dotted-docs/)
 
 ## BASES DE DONNEE
 
 - <details>
-      <summary>Utilisateurs</summary>
+      <summary>Users</summary>
       <ul>
-          <li>Id (int, clé primaire)</li>
-          <li>Username (str, unique dans la table)</li>
-          <li>Password (str)</li>
-          <li>IP (Liste d'IP)</li>
+          <li>Id (INT, clé primaire)</li>
+          <li>Username (TEXT, unique dans la table)</li>
+          <li>Password (TEXT)</li>
+          <li>Token (TEXT)</li>
       </ul>
   </details>
 
 - <details>
       <summary>Pages</summary>
       <ul>
-          <li>Id (int, clé primaire)</li>
-          <li>Parent (int, clé étrangère de Pages(Id))</li>
-          <li>Nom (str)</li>
-          <li>Banniere (str)</li>
-          <li>Icon (str)</li>
-          <li>Contenu (Objet JSON)</li>
+          <li>Id (INT, clé primaire)</li>
+          <li>Parent (INT, clé étrangère de Pages(Id))</li>
+          <li>Title (TEXT)</li>
+          <li>Banniere (TEXT)</li>
+          <li>Icon (TEXT)</li>
+          <li>Contenu (JSONB)</li>
       </ul>
   </details>
 
 - <details>
       <summary>LinkinPark</summary>
       <ul>
-          <li>UserId (int, clé primaire avec PageId, clé etrangère de Utilisateurs(Id))</li>
-          <li>PageId (int, clé primaire avec UserId,clé étrangère de Pages(Id))</li>
-          <li>Visibilite (bool)</li>
+          <li>UserId (INT, clé primaire avec PageId, clé etrangère de Users(Id))</li>
+          <li>PageId (INT, clé primaire avec UserId,clé étrangère de Pages(Id))</li>
+          <li>Visibilite (BOOLEAN)</li>
       </ul>
   </details>
 
 - <details>
       <summary>Categories</summary>
       <ul>
-          <li>Id (int, clé primaire)</li>
-          <li>PageId (int, clé étrangère de Pages(Id))</li>
-          <li>Icon (str)</li>
-          <li>Nom (str)</li>
-          <li>Val (str)</li>
+          <li>Id (INT, clé primaire)</li>
+          <li>PageId (INT, clé étrangère de Pages(Id))</li>
+          <li>Icon (TEXT)</li>
+          <li>Nom (TEXT)</li>
+          <li>Type (TEXT)</li>
+          <li>Value (TEXT)</li>
       </ul>
   </details>
 
-## ENDPOINT
+## ENDPOINTS
 
-| Endpoint                      | Utilisation                                                    |
-| ----------------------------- | -------------------------------------------------------------- |
-| `GET /signUp`                 | Créé un compte utilisateur                                     |
-| `GET /logIn`                  | Verifier si l'utilisateur connecté a entré le bon mot de passe |
-| `POST /logOut`                | Déconnecte l'utilisateur                                       |
-| `GET /con`                    | Verifier si l'utilisateur connecté a entré le bon mot de passe |
-| `GET /maxId`                  | Renvoie le plus grand ID de toutes les pages                   |
-| `GET /peuxCon/{IDPAGE}`       | Verifier si l'utilisateurpux voir IDPAGE                       |
-| `GET /`                       | Récupère le nom d'utilisateur du connecté                      |
-| `GET /Racine`                 | Affiche La liste des projets de l'utilisateur                  |
-| `GET /Racine/prive`           | Affiche La liste des projets privés de l'utilisateur           |
-| `POST /initProj`              | Initialise un projet                                           |
-| `POST /initProj/enfant`       | Initialise un enfant avec le nom du parent                     |
-| `POST /initProj/prive`        | Initialise un projet privé                                     |
-| `POST /supprProj`             | Supprime une page                                              |
-| `POST /Change/Nom`            | Change le titre d'une page                                     |
-| `GET /Path/{IDPAGE}`          | Récupère le chemin pour acceder a une page                     |
-| `GET /titre/{IDPAGE}`         | Récupère le titre d'une page                                   |
-| `GET /Cont/{IDPAGE}`          | Récupère le contenu d'une page                                 |
-| `POST /Modif/Cont/{IDPAGE}`   | Modifie le contenu d'une page                                  |
-| `GET /Icon/Page/{IDPAGE}`     | Renvoie le contenu de l'iconne correspondante                  |
-| `GET /Banniere/Page/{IDPAGE}` | Renvoie le contenu de la banniere correspondante               |
-| `POST /Icon/change`           | Modifie le contenu de l'iconne                                 |
-| `POST /Banniere/change`       | Change le contenu de la banniere correspondante                |
-| `POST /Banniere/del`          | Supprime le contenu de la banniere correspondante              |
-| `GET /Image/charge/{Name}`    | Renvoie l'image demandée                                       |
-| `POST /Image/get`             | Enregistre l'image                                             |
+| Routes             | Description           |
+| ------------------ | --------------------- |
+| [`/User`](#user)   | Gère les utilisateurs |
+| [`/Page`](#page)   | Gère les pages        |
+| [`/Image`](#image) | Gère les images       |
 
-## Note
+### `/User`
 
-- Le principe pour le login est de stocker l'ip de l'utilisateur lors d'une connection.
-- Les pages peuvent être publiques ou privées
-- Les relations utilisateurs/pages sont gérées via la table LinkinPark
-- Les images sont stokés dans des fichiers séparés
+| Endpoint             | Parametres                | Utilité                                                                                        |
+| -------------------- | ------------------------- | ---------------------------------------------------------------------------------------------- |
+| `GET /User/`         |                           | Obtenir la liste de tout les utilisateurs                                                      |
+| `PUT /User/`         | `username`,`mdp`          | Ajouter un utilisateur                                                                         |
+| `POST /User/login`   | `username`,`mdp`          | Créer un cookie avec le token de l'utilisateur                                                 |
+| `POST /User/logout`  |                           | Supprime le cookie avec le token de l'utilisateur                                              |
+| `GET /User/bonjour`  |                           | Renvoie la chaîne Bonjour suivis du nom d'utilisateur assocé au token                          |
+| `POST /User/:name`   | `:name`,`type`, `nouveau` | Change la valeur du `type` ("username" ou "password") par `nouveau` pour l'utilisateur `:name` |
+| `DELETE /User/:name` | `:name`                   | Supprime l'utilisateur `:name`                                                                 |
 
-## Installation
+### `/Page`
 
-Tout est détailé [ici](https://github.com/3x0De/Dotted-docs/blob/main/INSTALLATION.md).
+| Endpoint             | Parametres               | Utilité                                                                                                    |
+| -------------------- | ------------------------ | ---------------------------------------------------------------------------------------------------------- |
+| `POST /Page`         | `racine`, `prive`        | Récupère les pages public (ou privé si `prive` = true ) et uniquement les pages racines si `racine` = true |
+| `PUT /Page`          | `visibilite`,`parent`    | Créé une page de parent `parent`et de visibilité `visibilite`                                              |
+| `GET /Page/:id`      | `:id`                    | Obtenir les informations sur la page `:id`                                                                 |
+| `POST /Page/:id`     | `:id` ,`type`, `nouveau` | Change la valeur de `type`("titre", "icon", "banniere" ou "contenu") en `nouveau` pour la page `:id`       |
+| `DELETE /Page/:id`   | `:id`                    | Supprime la page `:id`                                                                                     |
+| `GET /Page/:id/Path` | `:id`                    | Remonte les parents de `:id` jusqu'à une racine                                                            |
+
+### `/Image`
+
+| Endpoint              | Parametres | Utilité                                                   |
+| --------------------- | ---------- | --------------------------------------------------------- |
+| `PUT /Image`          | `:image`   | Ajoute l'image `:image` et renvoie le lien pour y acceder |
+| `GET /Image/:name`    | `:name`    | Récupère l'image `:name`                                  |
+| `DELETE /Image/:name` | `:name`    | Supprime l'image `:name`                                  |
+
+## Notes
+
+- Le principe pour le login est de stocker un token de session lors d'une connection.
+- Les pages peuvent être publiques ou privées.
+- Les relations utilisateurs/pages sont gérées via la table LinkinPark.
+
+## Documentation
+
+- [Architecture globale](https://github.com/3x0De/Dotted-docs/blob/main/ARCHITECTURE.md)
+- [Installation détaillée](https://github.com/3x0De/Dotted-docs/blob/main/INSTALLATION.md)
+- [Changelog](./CHANGELOG.md)

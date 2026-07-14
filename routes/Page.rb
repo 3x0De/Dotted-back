@@ -70,8 +70,6 @@ class Page < Sinatra::Base
 
         gestion = PagesList.new token
 
-        puts visibilite
-
         requete = gestion.add!(visibilite, parent)
 
         if requete

@@ -75,7 +75,6 @@ class DatabaseComunicator
 
       query = "UPDATE #{@table} SET #{set_clause} WHERE #{condition};"
 
-      puts query
 
       DB[query, *args].update
       true

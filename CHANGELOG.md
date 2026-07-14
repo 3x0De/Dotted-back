@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0] - GRAND REFACTO - 14/07/2026
+
+- Changement du langage en ruby sinatra
+- Refonte de toutes les routes
+- Ajout de variable d'environnement
+- Changement du moyern de stoker la session (token)
+
 ## [0.2.2] - 19/06/2026
 
 - Ajout de la modification des fichiers
