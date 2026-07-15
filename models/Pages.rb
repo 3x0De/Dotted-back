@@ -85,6 +85,18 @@ class Pages < DatabaseComunicator
         @cat.add!(nom, type, value)
     end
 
+    def changeCate! (type, nouveau, paramId)
+
+        if type == "nom"
+            @cat.nom(nouveau, paramId)
+        elsif type == "type"
+            @cat.type(nouveau, paramId)
+        elsif type == "value"
+            @cat.val(nouveau, paramId)
+        end
+
+    end
+
 
 end
 

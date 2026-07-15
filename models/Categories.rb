@@ -19,4 +19,16 @@ class CategoriesList < DatabaseComunicator
         resultat = add_val!({nom: nom, type: type, value: value, pageid: @idPage})
     end
 
+    def nom(val, paramId)
+        change_val!("nom", "id = ?", val, paramId)
+    end
+
+    def type(val, paramId)
+        change_val!("type", "id = ?", val, paramId)
+    end
+
+    def val(val, paramId)
+        change_val!("value", "id = ?", val, paramId)
+    end
+
 end
