@@ -204,8 +204,13 @@ class Page < Sinatra::Base
         page = Pages.new token, id
 
         if page.valide
+            cat = []
+            page.Categories.each do |el|
+                cat.push "/#{hash_url(id)}/Categories/#{hash_url(id + el)}"
+            end
+
             status 200
-            page.Categories.to_json
+            cat.to_json
         else
             status 401
             { message: "Deso t'a pas les droits" }.to_json

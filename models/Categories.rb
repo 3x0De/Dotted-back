@@ -9,9 +9,13 @@ class CategoriesList < DatabaseComunicator
 
         @idPage = idPage
 
-        resultat = recup_val(true, "nom, type, value", "PageId = ?", @idPage)
+        resultat = recup_val(true, "id", "PageId = ?", @idPage)
 
-        @liste = resultat
+        @liste = []
+
+        resultat.each do |el|
+            @liste.push el[:id]
+        end
 
     end
 
