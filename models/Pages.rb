@@ -103,6 +103,10 @@ class Pages < DatabaseComunicator
 
     end
 
+    def getCate(paramId)
+        @cat.get(paramId)
+    end
+
 
 end
 

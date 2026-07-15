@@ -39,4 +39,8 @@ class CategoriesList < DatabaseComunicator
         delete_val!({id: paramId})
     end
 
+    def get(paramId)
+        recup_val(false, "nom, type, value", "PageId = ?", paramId)
+    end
+
 end

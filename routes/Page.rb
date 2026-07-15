@@ -206,7 +206,7 @@ class Page < Sinatra::Base
         if page.valide
             cat = []
             page.Categories.each do |el|
-                cat.push "/#{hash_url(id)}/Categories/#{hash_url(id + el)}"
+                cat.push "Page/#{hash_url(id)}/Categories/#{hash_url(id + el)}"
             end
 
             status 200
@@ -261,6 +261,26 @@ class Page < Sinatra::Base
     end
 
     # /:id/Categories/:cate
+
+    get "/:id/Categories/:cate" do
+
+        content_type :json
+
+        id      = unhash_url params[:id]
+        cate    = unhash_url(params[:cate]) - id
+        token   = request.cookies['DottedClub']
+
+        page = Pages.new token, id
+
+        if page.valide
+            status 200
+            page.getCate(cate).to_json
+        else
+            status 401
+            { message: "Deso t'a pas les droits" }.to_json
+        end
+
+    end
 
     post "/:id/Categories/:cate" do
         content_type :json
