@@ -1,9 +1,10 @@
 require_relative "../services/HashURL"
 require_relative "DatabaseComunicator"
+require_relative "Categories"
 
 class Pages < DatabaseComunicator
 
-    attr_reader :valide, :Title, :Icon, :Banniere, :Contenu, :Parent
+    attr_reader :valide, :Title, :Icon, :Banniere, :Contenu, :Parent, :Categories
 
     def initialize(token, id)
         super("pages")
@@ -20,12 +21,15 @@ class Pages < DatabaseComunicator
             query = recup_val(false, "title, icon, banniere, contenu, parent", "id = ?", id)
 
 
-            @Title    = query ? query[:title] : nil
-            @Icon     = query ? query[:icon] : nil
-            @Banniere = query ? query[:banniere] : nil
-            @Contenu  = query ? query[:contenu] : nil
-            @Parent   = query ? query[:parent] : nil
-            @id       = id
+            @Title      = query ? query[:title] : nil
+            @Icon       = query ? query[:icon] : nil
+            @Banniere   = query ? query[:banniere] : nil
+            @Contenu    = query ? query[:contenu] : nil
+            @Parent     = query ? query[:parent] : nil
+            @id         = id
+
+            cat = CategoriesList.new @id
+            @Categories = cat.liste
         end
     end
 

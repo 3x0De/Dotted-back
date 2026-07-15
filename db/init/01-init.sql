@@ -33,7 +33,6 @@ CREATE TABLE LinkinPark (
 CREATE TABLE Categories (
     Id SERIAL PRIMARY KEY,
     PageId INT,
-    Icon TEXT,
     Nom TEXT,
     Type TEXT,
     Value TEXT,

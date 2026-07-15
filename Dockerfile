@@ -5,7 +5,7 @@ ENV PATH="${GEM_HOME}/bin:${PATH}"
 
 WORKDIR /app
 
-COPY Gemfile ./
+COPY Gemfile Gemfile.lock ./
 RUN bundle install
 
 COPY . .
