@@ -69,14 +69,19 @@ Ce repo fait partie du projet [Dotted](https://github.com/3x0De/Dotted-docs/)
 
 ### `/Page`
 
-| Endpoint             | Parametres               | Utilité                                                                                                    |
-| -------------------- | ------------------------ | ---------------------------------------------------------------------------------------------------------- |
-| `POST /Page`         | `racine`, `prive`        | Récupère les pages public (ou privé si `prive` = true ) et uniquement les pages racines si `racine` = true |
-| `PUT /Page`          | `visibilite`,`parent`    | Créé une page de parent `parent`et de visibilité `visibilite`                                              |
-| `GET /Page/:id`      | `:id`                    | Obtenir les informations sur la page `:id`                                                                 |
-| `POST /Page/:id`     | `:id` ,`type`, `nouveau` | Change la valeur de `type`("titre", "icon", "banniere" ou "contenu") en `nouveau` pour la page `:id`       |
-| `DELETE /Page/:id`   | `:id`                    | Supprime la page `:id`                                                                                     |
-| `GET /Page/:id/Path` | `:id`                    | Remonte les parents de `:id` jusqu'à une racine                                                            |
+| Endpoint                            | Parametres                      | Utilité                                                                                                      |
+| ----------------------------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `POST /Page`                        | `racine`, `prive`               | Récupère les pages public (ou privé si `prive` = true ) et uniquement les pages racines si `racine` = true   |
+| `PUT /Page`                         | `visibilite`,`parent`           | Créé une page de parent `parent`et de visibilité `visibilite`                                                |
+| `GET /Page/:id`                     | `:id`                           | Obtenir les informations sur la page `:id`                                                                   |
+| `POST /Page/:id`                    | `:id`,`type`, `nouveau`         | Change la valeur de `type`("titre", "icon", "banniere" ou "contenu") en `nouveau` pour la page `:id`         |
+| `DELETE /Page/:id`                  | `:id`                           | Supprime la page `:id`                                                                                       |
+| `GET /Page/:id/Path`                | `:id`                           | Remonte les parents de `:id` jusqu'à une racine                                                              |
+| `GET /Page/:id/Categories`          | `:id`                           | Récupère les catégories de la page `:id`                                                                     |
+| `PUT /Page/:id/Categories`          | `:id`, `value`,`nom`,`type`     | Ajoute la catégorie `nom`, de type `type` et de valeur `value` a la page `:id`                               |
+| `GET /Page/:id/Categories/:cate`    | `:id`,`:cate`                   | Renvoie les données de la catégorie `:cate` de la page `:id`                                                 |
+| `POST /Page/:id/Categories/:cate`   | `:id`,`:cate`,`type`, `nouveau` | Change la valeur de `type`("nom", "type" ou "value") en `nouveau` pour la catégorie `:cate` de la page `:id` |
+| `DELETE /Page/:id/Categories/:cate` | `:id`,`:cate`                   | Supprime la catégorie `:cate` de la page `:id`                                                               |
 
 ### `/Image`
 
