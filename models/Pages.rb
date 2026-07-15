@@ -97,6 +97,12 @@ class Pages < DatabaseComunicator
 
     end
 
+    def delCate! (paramId)
+
+        @cat.del!(paramId)
+
+    end
+
 
 end
 

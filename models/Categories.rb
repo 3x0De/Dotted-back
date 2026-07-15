@@ -31,4 +31,8 @@ class CategoriesList < DatabaseComunicator
         change_val!("value", "id = ?", val, paramId)
     end
 
+    def del!(paramId)
+        delete_val!({id: paramId})
+    end
+
 end
