@@ -31,7 +31,6 @@ class DatabaseComunicator
       query = "SELECT #{attribut} FROM #{@table};"
     end
 
-    puts query
 
 
     if multiple

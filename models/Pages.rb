@@ -28,8 +28,8 @@ class Pages < DatabaseComunicator
             @Parent     = query ? query[:parent] : nil
             @id         = id
 
-            cat = CategoriesList.new @id
-            @Categories = cat.liste
+            @cat = CategoriesList.new @id
+            @Categories = @cat.liste
         end
     end
 
@@ -80,6 +80,11 @@ class Pages < DatabaseComunicator
 
         parent_page.path << { name: @Title, path: hash_url(@id) }
     end
+
+    def addCate! (nom, type, value)
+        @cat.add!(nom, type, value)
+    end
+
 
 end
 

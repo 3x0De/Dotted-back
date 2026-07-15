@@ -15,4 +15,8 @@ class CategoriesList < DatabaseComunicator
 
     end
 
+    def add! (nom, type, value)
+        resultat = add_val!({nom: nom, type: type, value: value, pageid: @idPage})
+    end
+
 end

@@ -213,4 +213,47 @@ class Page < Sinatra::Base
 
     end
 
+    put "/:id/Categories" do
+        content_type :json
+
+        request_body = request.body.read
+
+        if request_body.strip.empty?
+            status 400
+            return { message: "Erreur : Le corps de la requête (JSON) est vide !" }.to_json
+        end
+
+        begin
+            payload = JSON.parse(request_body)
+        rescue JSON::ParserError
+            status 400
+            return { message: "Erreur : Le format JSON envoyé est invalide !" }.to_json
+        end
+
+        id    = unhash_url params[:id]
+        token = request.cookies['DottedClub']
+        value = payload["value"]
+        nom   = payload["nom"]
+        type  = payload["type"]
+
+        page = Pages.new token, id
+
+        if page.valide
+            requete = page.addCate!(nom, type, value)
+
+            if requete
+                status 201
+                { message: "Catégorie créé avec succès !", data: hash_url(requete + id) }.to_json
+            else
+                status 401
+                { message: "No bitches ?" }.to_json
+            end
+        else
+            status 401
+            { message: "Deso t'a pas les droits" }.to_json
+        end
+
+    end
+
+
 end
